@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShopWebData\ShopWebData.csproj" />
+    <ProjectReference Include="..\ShopWebException\ShopWebException.csproj" />
+    <ProjectReference Include="..\ShopWebModels\ShopWebModels.csproj" />
+  </ItemGroup>
+
+</Project>

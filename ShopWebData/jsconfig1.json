@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "Connect": "Data Source=DESKTOP-VU8RMJO\\SEVENKJ;Initial Catalog=ShopWeb;Integrated Security=True"
+  }
+}
