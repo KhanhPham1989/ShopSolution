@@ -17,6 +17,7 @@ using System.Threading.Tasks;
         Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductEditRequest request);
         Task<int> Delete(int productId);
+        Task<ProductViewModel> GetById(int productId, int languageID);
 
         Task<List<Product>> GetAll();
         //Task<List<ProductViewModel>> GetAllPaging(string key, int pageIndex, int pageSize);

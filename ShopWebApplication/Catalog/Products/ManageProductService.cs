@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopWebApplication.Common;
 using ShopWebData.DbContextData;
@@ -35,13 +36,18 @@ namespace ShopWebApplication.Catalog.Products
                 OriginalPrice = request.OriginalPrice,
                 Stock = request.Stock,
                 ViewCount = 0,
+                ProductName = request.Name,
+                SeoAlias = request.SeoAlias,
+                DateCreated = DateTime.Now,
+                Description = request.Description,
                 ProductTranslations = new List<ProductTranslation>
                 {
                     new ProductTranslation
                     {
-                        Name = request.Name,
+                        LangueId = request.langId,
                         Description = request.Description,
-                        Details = request.Details
+                        Details = request.Details,
+                        SeoAlias = request.SeoAlias
                     }
                 }
             };
@@ -53,7 +59,7 @@ namespace ShopWebApplication.Catalog.Products
                 {
                     new ProductImage
                     {
-                        Caption = request.Caption,
+                        Caption = request.CaptionImage,
                         DateCreate = DateTime.Now,
                         FileSize = request.ThumbnaiImage.Length,
                         ImagePath = await this.SaveFile(request.ThumbnaiImage),
@@ -72,20 +78,16 @@ namespace ShopWebApplication.Catalog.Products
         {
             var product = await data.Products.FindAsync(productId);
             if (product == null) throw new Exception("Can not find Product" + productId);
-            if(product.ProductImages.Count > 0)
+            var images = data.ProductImages.Where(x => x.ProductId == productId);
+            if (images != null )
             {
-                var images = data.ProductImages.Where(x => x.ProductId == productId);
-                if (images != null)
-                {
                     foreach (var image in images)
                     {
                        await _Istoreservice.DeleteFileAsync(image.ImagePath);
                     }
-                }
             }
             data.Products.Remove(product);
-            await data.SaveChangesAsync();
-            return product.Id;
+            return await data.SaveChangesAsync();
         }
 
         public async Task<List<Product>> GetAll()
@@ -184,11 +186,11 @@ namespace ShopWebApplication.Catalog.Products
             
         }
 
-        public async Task<string> SaveFile(IFormFile File)
+        private async Task<string> SaveFile(IFormFile file)
         {
-            var originalFileName = ContentDispositionHeaderValue.Parse(File.ContentDisposition).FileName.Trim();
+            var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
-            await _Istoreservice.SaveFileAsync(File.OpenReadStream(), fileName);
+            await _Istoreservice.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;
         }
 
@@ -205,6 +207,30 @@ namespace ShopWebApplication.Catalog.Products
         public Task<int> UpdateImage(int imageId, string caption, bool Isdefault)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<ProductViewModel> GetById(int productId,int languageID)
+        {
+            var product = await data.Products.FindAsync(productId);
+            var productTranslation = await data.ProductTranslations.
+                    FirstOrDefaultAsync(x => x.ProductId == productId && x.LangueId == languageID);
+            if (product == null)
+                return null;
+
+            var productViewModel = new ProductViewModel
+            {
+                ProductName = product.ProductName,
+                Price = product.Price,
+                OriginalPrice = product.OriginalPrice,
+                Stock = product.Stock,
+                Description = productTranslation == null ? productTranslation.Description : null,
+                SeoAlias = productTranslation == null ? productTranslation.SeoAlias : null,
+                SeoDescription = productTranslation == null ? productTranslation.SeoDescription : null,
+                DateCreated = product.DateCreated,
+                SeoTitle = productTranslation == null ? productTranslation.SeoTitle : null,
+                ViewCount = product.ViewCount
+            };
+            return productViewModel;
         }
     }
 }

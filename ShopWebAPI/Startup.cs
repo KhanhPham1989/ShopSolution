@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using ShopWebApplication.Catalog.Products;
 using ShopWebApplication.Common;
 using ShopWebData.DbContextData;
@@ -29,10 +30,12 @@ namespace ShopWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TeduDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("Connect")));
+            options.UseSqlServer(Configuration.GetConnectionString(ConnectionStringcs.Connect)));
             services.AddTransient<IStoreService, PublicIstorageService>();
             services.AddTransient<IManageProductService,ManageProductService>();
             services.AddTransient<IPublicProductService,PublicProductService>();
+
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swager ShopOnlineAPI", Version = "v1" }));
             services.AddControllersWithViews();
         }
 
@@ -55,6 +58,8 @@ namespace ShopWebAPI
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSwagger();
+            app.UseSwaggerUI(p => p.SwaggerEndpoint("/swagger/v1/swagger.json", "Swager ShopOnlineAPI"));
 
             app.UseEndpoints(endpoints =>
             {
