@@ -52,13 +52,14 @@ namespace ShopWebApplication.Catalog.Products
         }
 
         // tra ve list cua ProductViewModel
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryById(GetPublicProductPagingRequest request) 
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryById(int langId,GetPublicProductPagingRequest request) 
         {
             // select and join
             var query = from p in data.Products
                         join pt in data.ProductTranslations on p.Id equals pt.ProductId
                         join pic in data.ProductCategory on p.Id equals pic.ProductId
                         join c in data.Categories on pic.CategoryId equals c.Id
+                        where pt.LangueId == langId
                         select new { p, pt, pic };
 
             // filter

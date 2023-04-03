@@ -12,7 +12,7 @@ namespace ShopWebApplication.Catalog.Products
 {
     public interface IPublicProductService
     {
-        Task<PageResult<ProductViewModel>> GetAllByCategoryById(GetPublicProductPagingRequest request);
+        Task<PageResult<ProductViewModel>> GetAllByCategoryById(int langId,GetPublicProductPagingRequest request);
 
         Task<List<ProductViewModel>> GetAll();
        // Task<List<Product>> GetList();
