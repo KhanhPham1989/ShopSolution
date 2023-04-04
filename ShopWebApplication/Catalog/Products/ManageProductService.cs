@@ -281,7 +281,7 @@ namespace ShopWebApplication.Catalog.Products
             return await data.SaveChangesAsync(); // return 1 if success
         }
 
-        public async Task<Dictionary<string, int>> UpdateImage(int productId, int ImageId, ImageEditRequest request)
+        public async Task<int> UpdateImage(int productId, int ImageId, ImageEditRequest request)
         {
             var productImage = await data.ProductImages.FindAsync(ImageId);
             if (productImage == null)
@@ -298,10 +298,8 @@ namespace ShopWebApplication.Catalog.Products
             }
             data.ProductImages.Update(productImage);
             await data.SaveChangesAsync();
-            var list = new Dictionary<string, int>();
-            list.Add("productID", productId);
-            list.Add("ImageID", ImageId);
-            return list;
+
+            return productImage.Id;
         }
 
         public async Task<bool> UpdatePrice(int ProductId, decimal newPrice)
@@ -333,7 +331,7 @@ namespace ShopWebApplication.Catalog.Products
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
+            var fileName = $"{Guid.NewGuid()}{(originalFileName)}";
             await _Istoreservice.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;
         }

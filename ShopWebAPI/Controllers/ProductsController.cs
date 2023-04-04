@@ -148,8 +148,8 @@ namespace ShopWebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("All property must take note");
             var resurl = await _manager.UpdateImage(productId, ImageId, request);
-            if (resurl.Count > 0)
-                return CreatedAtAction(nameof(GetImageByID), resurl, new { id = resurl.Values });
+            if (resurl == 0)
+                return CreatedAtAction(nameof(GetImageByID), resurl, new { id = resurl });
             return NotFound();
         }
 

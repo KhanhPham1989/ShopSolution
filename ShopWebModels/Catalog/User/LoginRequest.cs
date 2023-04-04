@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ShopWebModels.Catalog.User
 {
-    public class GetUserEditRequest
+    public class LoginRequest
     {
+        public string UserLogin { get; set; }
+        public string PassWord { get; set; }
+        public bool RememberMe { get; set; }
     }
 }
