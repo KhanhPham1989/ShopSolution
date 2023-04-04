@@ -39,7 +39,7 @@ namespace ShopWebApplication.Catalog.Products
 
         Task<int> RemoveImages(int productId, int ImageId);
 
-        Task<Dictionary<string, int>> UpdateImage(int productId, int ImageId, ImageEditRequest request);
+        Task<int> UpdateImage(int productId, int ImageId, ImageEditRequest request);
 
         Task<List<ImageViewModels>> GetListImages(int productId);
 
