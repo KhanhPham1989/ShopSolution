@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShopWebApplication.Catalog.Products;
 using ShopWebApplication.Catalog.User;
@@ -13,9 +17,12 @@ using ShopWebApplication.Common;
 using ShopWebData.DbContextData;
 using ShopWebData.Entities;
 using ShopWebException.Common;
+using ShopWebModels.Catalog.User;
+using ShopWebModels.Catalog.User.ValadateUser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ShopWebAPI
@@ -45,7 +52,16 @@ namespace ShopWebAPI
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<RoleIdentity>, RoleManager<RoleIdentity>>();
             services.AddTransient<IUserService, UserServiceImp>();
+            services.AddTransient<IValidator<LoginRequest>, LoginValidate>();
+            services.AddTransient<IValidator<RegisterRequest>, RegisterValidate>();
 
+            services.AddControllers().AddFluentValidation(fw =>
+            {
+                fw.RegisterValidatorsFromAssemblyContaining<LoginValidate>();
+                fw.RegisterValidatorsFromAssemblyContaining<RegisterValidate>();
+            });
+
+            services.AddHttpClient();
             //services.Configure<IdentityOptions>(options =>
             //{
             //    // Thiết lập về Passwor;
@@ -72,8 +88,66 @@ namespace ShopWebAPI
             //    options.SignIn.RequireConfirmedAccount = true;
             //});
 
-            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swager ShopOnlineAPI", Version = "v1" }));
-            services.AddControllersWithViews();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Swager ShopOnlineAPI", Version = "v1" });
+
+                // dinh nghia security
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "Here is the security to protected API server. Please input the token heare.",
+                    Name = "Authorization", // xac dinh quyen su dujng vs token
+                    Type = SecuritySchemeType.ApiKey, // kieu
+                    In = ParameterLocation.Header, // token lay tu dau (header, query or cokie)
+                    Scheme = "Bearer",
+                });
+
+                // cau hinh bao mat
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement() // pt nhan 2 key
+                {
+                    {
+                        new OpenApiSecurityScheme()
+                    {
+                        Reference = new OpenApiReference()
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id =  "Bearer",
+                        },
+                        Scheme = "oauth2" ,
+                        Name =  "Bearer",
+                        In = ParameterLocation.Header,
+                    },
+                    new List<string>()
+                    }
+                });
+            });
+
+            var AppSettingToken = Configuration.GetSection("Token");
+            var TokenKey = AppSettingToken["Key"];
+            var TokenIssuer = AppSettingToken["Issuer"];
+            var TokenByte = Encoding.UTF8.GetBytes(TokenKey);
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // ten mac dinh he thong
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = TokenIssuer,
+                        ValidateAudience = true,
+                        ValidAudience = TokenIssuer,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ClockSkew = TimeSpan.Zero,
+                        IssuerSigningKey = new SymmetricSecurityKey(TokenByte)
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,6 +166,7 @@ namespace ShopWebAPI
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();

@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebModels", "ShopWebMod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebAPI", "ShopWebAPI\ShopWebAPI.csproj", "{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopWeb-AdminApp", "ShopWeb-AdminApp\ShopWeb-AdminApp.csproj", "{3F009053-FF7A-4019-9678-803592597D69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F009053-FF7A-4019-9678-803592597D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F009053-FF7A-4019-9678-803592597D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F009053-FF7A-4019-9678-803592597D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F009053-FF7A-4019-9678-803592597D69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

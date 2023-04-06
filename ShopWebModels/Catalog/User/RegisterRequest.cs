@@ -12,5 +12,6 @@ namespace ShopWebModels.Catalog.User
         public string PassWordConfirm { get; set; }
         public string UserPhone { get; set; }
         public string Email { get; set; }
+        public DateTime DOB { get; set; }
     }
 }

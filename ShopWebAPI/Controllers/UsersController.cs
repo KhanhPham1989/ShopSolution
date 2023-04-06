@@ -18,9 +18,9 @@ namespace ShopWebAPI.Controllers
 
         public UsersController(IUserService userService) => _userService = userService;
 
-        [HttpPost("Login")]
+        [HttpPost("LoginAuthenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginAuthenticate([FromForm] LoginRequest request)
+        public async Task<IActionResult> LoginAuthenticate([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
                 // ModelState.ToList().ForEach(error => throw new Exception(error.ToString()));
@@ -34,7 +34,7 @@ namespace ShopWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAccount([FromForm] RegisterRequest register)
+        public async Task<IActionResult> CreateAccount([FromBody] RegisterRequest register)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
