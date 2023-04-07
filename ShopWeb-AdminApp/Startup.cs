@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,6 +36,8 @@ namespace ShopWeb_AdminApp
                 fw.RegisterValidatorsFromAssemblyContaining<RegisterValidate>();
             });
 
+            services.AddSession(opt => opt.IdleTimeout = TimeSpan.FromMinutes(30)); // gan thoi gian cho session
+
             IMvcBuilder builder = services.AddRazorPages();
             var enviroments = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG
@@ -43,6 +46,12 @@ namespace ShopWeb_AdminApp
                 builder.AddRazorRuntimeCompilation();
             }
 #endif
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
+            {
+                opt.LoginPath = "/User/Login";
+                opt.AccessDeniedPath = "/User/AccessDenied";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,9 +70,12 @@ namespace ShopWeb_AdminApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

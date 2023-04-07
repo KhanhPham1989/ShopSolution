@@ -30,10 +30,11 @@ namespace ShopWebAPI.Controllers
             if (string.IsNullOrEmpty(userLogin))
                 return BadRequest(userLogin);
 
-            return Ok(new { token = userLogin });
+            return Ok(userLogin);
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateAccount([FromBody] RegisterRequest register)
         {
             if (!ModelState.IsValid)
@@ -46,7 +47,7 @@ namespace ShopWebAPI.Controllers
             return Ok(register.FullName);
         }
 
-        [HttpPatch("{userLogin}")]
+        [HttpPatch("ChangePassWord/{userLogin}")]
         [AllowAnonymous]
         public async Task<IActionResult> ChangePassWord(string userLogin, [FromForm] ChangePassWord request)
         {
@@ -60,7 +61,7 @@ namespace ShopWebAPI.Controllers
             return Ok();
         }
 
-        [HttpPut("{userlogin}")]
+        [HttpPut("EditInforUser/{userlogin}")]
         [AllowAnonymous]
         public async Task<IActionResult> EditInforUser(string userlogin, [FromForm] EditRequest request)
         {
@@ -72,6 +73,18 @@ namespace ShopWebAPI.Controllers
                 return BadRequest(reset);
 
             return Ok(reset);
+        }
+
+        //http://localhost/api/Users/GetUserPaging?pageIndex=1&pageSize=10&keyword=
+        [HttpGet("GetUserPaging")]
+        public async Task<IActionResult> GetUserPaging([FromQuery] GetUserPagingRequest request)
+        {
+            var UserList = await _userService.GetUserPaging(request);
+            if (UserList.TotalRecord > 0)
+            {
+                return Ok(UserList);
+            }
+            return null;
         }
     }
 }
