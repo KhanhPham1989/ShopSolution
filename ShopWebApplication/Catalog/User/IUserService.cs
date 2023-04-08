@@ -12,12 +12,14 @@ namespace ShopWebApplication.Catalog.User
     {
         Task<string> Authencated(LoginRequest request);
 
-        Task<bool> RegisterUser(RegisterRequest request);
+        Task<APIResult<bool>> RegisterUser(RegisterRequest request);
 
-        Task<UserViewModel> EditUser(string userlogin, EditRequest request);
+        Task<APIResult<UserViewModel>> EditUser(Guid id, EditRequest request);
 
         Task<bool> ChangPassWord(string userlogin, ChangePassWord request);
 
         Task<PageResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request);
+
+        Task<APIResult<UserViewModel>> GetById(Guid id);
     }
 }

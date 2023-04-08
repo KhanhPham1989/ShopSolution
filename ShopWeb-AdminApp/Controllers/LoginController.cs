@@ -48,8 +48,8 @@ namespace ShopWeb_AdminApp.Controllers
                 }
             }
 
-            var token = await _userService.LoginAuthenticate(request);
-            var userPrinciple = this.ValidateToken(token);
+            var result = await _userService.LoginAuthenticate(request);
+            var userPrinciple = this.ValidateToken(result);
             var auth = new AuthenticationProperties()
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
@@ -57,7 +57,7 @@ namespace ShopWeb_AdminApp.Controllers
 
                 //nhận hoặc đặt xem phiên xác thực có được duy trì qua nhiều yêu cầu hay khong
             };
-            HttpContext.Session.SetString("Token", token);
+            HttpContext.Session.SetString("Token", result);
 
             await HttpContext.SignInAsync(
                                             scheme: CookieAuthenticationDefaults.AuthenticationScheme,

@@ -35,13 +35,13 @@ namespace ShopWeb_AdminApp.Controllers
             //TokenSession = session;
             var GetUser = new GetUserPagingRequest()
             {
-                BearerToken = session,
+                // BearerToken = session,
                 PageIndex = PageIndex,
                 PageSize = PageSize,
                 Keyword = Keyword
             };
             var data = await _userService.GetUserPaging(GetUser);
-            return View(data);
+            return View(data.ObjResult);
         }
 
         public IActionResult ChangePassWord()
@@ -71,8 +71,34 @@ namespace ShopWeb_AdminApp.Controllers
             if (!ModelState.IsValid)
                 return View();
             var resurl = await _userService.Register(request);
-            if (!resurl)
+            if (!resurl.Success)
+            {
+                ModelState.AddModelError("", resurl.Message);
+                return View(request);
+            }
+
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var user = await _userService.GetById(id);
+            return View(user);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Edit(Guid id, EditRequest request)
+        {
+            if (!ModelState.IsValid)
                 return View();
+            var resurl = await _userService.UpdateUser(id, request);
+            if (!resurl.Success)
+            {
+                ModelState.AddModelError("", resurl.Message);
+                return View(request);
+            }
+
             return RedirectToAction(nameof(Index), "Home");
         }
     }

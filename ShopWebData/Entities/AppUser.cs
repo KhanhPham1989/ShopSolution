@@ -16,6 +16,9 @@ namespace ShopWebData.Entities
         [DataType(DataType.Date)]
         public DateTime LastLoginDate { get; set; }
 
+        [DataType(DataType.Date)]
+        public DateTime DOB { get; set; }
+
         public List<Order> Orders { get; set; }
         public List<SystemActivities> SystemActivities { get; set; }
         public List<Cart> Carts { get; set; }

@@ -9,6 +9,9 @@ namespace ShopWebModels.Catalog.User
 {
     public class EditRequest
     {
+        [DataType(DataType.Date)]
+        public DateTime DOB { get; set; }
+
         public string FullName { get; set; }
 
         public string UserPhone { get; set; }
