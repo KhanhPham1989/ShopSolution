@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using ShopWeb_AdminApp.Service.User;
 using ShopWebModels.Catalog.User;
+using ShopWebModels.Common;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace ShopWeb_AdminApp.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _config;
@@ -28,9 +29,10 @@ namespace ShopWeb_AdminApp.Controllers
             _config = Iconfiguration;
         }
 
-        public IActionResult Index(string Keyword, int PageIndex = 1, int PageSize = 10)
+        public async Task<IActionResult> Index(string Keyword, int PageIndex = 1, int PageSize = 10)
         {
             var session = HttpContext.Session.GetString("Token");
+            //TokenSession = session;
             var GetUser = new GetUserPagingRequest()
             {
                 BearerToken = session,
@@ -38,64 +40,40 @@ namespace ShopWeb_AdminApp.Controllers
                 PageSize = PageSize,
                 Keyword = Keyword
             };
-            var data = _userService.GetUserPaging(GetUser);
+            var data = await _userService.GetUserPaging(GetUser);
             return View(data);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Login()
+        public IActionResult ChangePassWord()
         {
-            // bat buoc log out nhung session cu khi vao login
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Logout()
         {
-            if (!ModelState.IsValid)
-            {
-                foreach (var item in ModelState)
-                {
-                    return View(item.ToString());
-                }
-            }
-
-            var token = await _userService.LoginAuthenticate(request);
-            var userPrinciple = this.ValidateToken(token);
-            var auth = new AuthenticationProperties()
-            {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = true,
-
-                //nhận hoặc đặt xem phiên xác thực có được duy trì qua nhiều yêu cầu hay khong
-            };
-            HttpContext.Session.SetString("Token", token);
-
-            await HttpContext.SignInAsync(
-                                            scheme: CookieAuthenticationDefaults.AuthenticationScheme,
-                                            principal: userPrinciple,
-                                            properties: auth);
-            // pt nhan 2 hoac 3 tham so, => string cookie, Priciple, 1 thiet lap thoi gian
-            return RedirectToAction(nameof(Index), "Home");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var TokenSession = HttpContext.Session.GetString("Token");
+            if (TokenSession != null)
+                HttpContext.Session.Remove(TokenSession);
+            return RedirectToAction(nameof(Index), "Login");
         }
 
-        private ClaimsPrincipal ValidateToken(string jwtToken)
+        [HttpGet]
+        public IActionResult Register()
         {
-            //var AppsettingRoot = _config.GetSection("Token");
-            //var TokenKey = AppsettingRoot["Key"];
-            //var TokenIssuer = AppsettingRoot["Issuer"];
-            IdentityModelEventSource.ShowPII = true;
+            return View();
+        }
 
-            SecurityToken validateToken;
-            TokenValidationParameters validationParameters = new TokenValidationParameters();
-            validationParameters.ValidateLifetime = true; // kiem soat token moi luc
-            validationParameters.ValidAudience = _config["Token:Issuer"];
-            validationParameters.ValidIssuer = _config["Token:Issuer"];
-            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
-
-            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validateToken);
-            return principal;
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var resurl = await _userService.Register(request);
+            if (!resurl)
+                return View();
+            return RedirectToAction(nameof(Index), "Home");
         }
     }
 }

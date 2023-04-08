@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebModels", "ShopWebMod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebAPI", "ShopWebAPI\ShopWebAPI.csproj", "{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopWeb-AdminApp", "ShopWeb-AdminApp\ShopWeb-AdminApp.csproj", "{3F009053-FF7A-4019-9678-803592597D69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWeb-AdminApp", "ShopWeb-AdminApp\ShopWeb-AdminApp.csproj", "{3F009053-FF7A-4019-9678-803592597D69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

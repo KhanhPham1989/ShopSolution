@@ -11,7 +11,7 @@ namespace ShopWeb_AdminApp.Service.User
     {
         Task<string> LoginAuthenticate(LoginRequest request);
 
-        //Task<bool> Register(RegisterRequest request);
+        Task<bool> Register(RegisterRequest request);
 
         Task<PageResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request);
     }
