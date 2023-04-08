@@ -23,7 +23,7 @@ namespace ShopWebModels.Catalog.User.ValadateUser
         {
             RuleFor(x => x.UserLogin).Length(5, int.MaxValue).GreaterThan("5");//.WithMessage($"{0} must be between {1} - {2} char");
 
-            RuleFor(x => x.Email).NotEmpty().WithMessage(x => $"{x.Email} required");
+            RuleFor(x => x.Email).NotEmpty().WithMessage(x => $"Email required");
             //.Matches("^[a-z][a-z0-9_]{5,32}@[a-z0-9]{2,}([a-z0-9]{2,4}){1,2}$")
             //.WithMessage(x => $"{x.Email} must be define exaple abc@email.com.");
 

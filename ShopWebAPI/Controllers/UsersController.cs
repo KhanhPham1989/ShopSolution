@@ -30,6 +30,7 @@ namespace ShopWebAPI.Controllers
             if (string.IsNullOrEmpty(userLogin))
                 return BadRequest(userLogin);
 
+            // HttpContext.Session.GetString(userLogin); // luu vao session
             return Ok(userLogin);
         }
 
