@@ -35,12 +35,14 @@ namespace ShopWebApplication.Catalog.User
         {
             var user = await _userManager.FindByNameAsync(request.UserLogin);
             if (user == null)
+                //return new APIFailResult<string>("Tai khoan khong ton tai"); ;
                 return null;
 
             var result = await _signinManager.PasswordSignInAsync(user, request.PassWord, request.RememberMe, false);
             //var result = await _signinManager.CheckPasswordSignInAsync(user, request.PassWord, true);
             if (!result.Succeeded)
-                throw new Exception(result.ToString());
+                // return new APIFailResult<string>("Mat khau khong dung");
+                return null;
 
             //user.LastLoginDate = DateTime.Now;
             //await _userManager.UpdateAsync(user);
@@ -86,6 +88,11 @@ namespace ShopWebApplication.Catalog.User
                     );
 
             var tokenstring = new JwtSecurityTokenHandler().WriteToken(Token);
+            //var s = new APISuccessResult<string>()
+            //{
+            //    ObjResult = tokenstring,
+            //};
+            //return new APISuccessResult<string>(tokenstring);
             return tokenstring;
         }
 
@@ -105,40 +112,39 @@ namespace ShopWebApplication.Catalog.User
             return true;
         }
 
-        public async Task<UserViewModel> EditUser(string userlogin, EditRequest request)
+        public async Task<APIResult<bool>> EditUser(Guid id, EditRequest request)
         {
-            var checkUser = await _userManager.FindByNameAsync(userlogin);
-            if (checkUser == null)
-                return null;
+            var checkuser = await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id);
+            if (checkuser)
+                return new APIFailResult<bool>("Email da ton tai");
 
-            checkUser.Email = request.Email == null ? checkUser.Email : request.Email;
-            checkUser.FullName = request.FullName == null ? checkUser.FullName : request.FullName;
-            checkUser.PhoneNumber = request.UserPhone == null ? checkUser.PhoneNumber : request.UserPhone;
-            var result = await _userManager.UpdateAsync(checkUser);
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            user.Email = request.Email;
+            user.FullName = request.FullName;
+            user.PhoneNumber = request.UserPhone;
+            user.DOB = request.DOB;
+
+            var result = await _userManager.UpdateAsync(user);
+
             if (!result.Succeeded)
-                result.Errors.ToList().ForEach(error => throw new Exception(error.Description));
+                result.Errors.ToList().ForEach(error => new APIFailResult<bool>(error.Description));
 
-            var user = new UserViewModel()
-            {
-                FullName = checkUser.FullName,
-                Email = checkUser.Email,
-                UserPhone = checkUser.PhoneNumber
-            };
-            return user;
+            return new APISuccessResult<bool>();
         }
 
-        public async Task<bool> RegisterUser(RegisterRequest request)
+        public async Task<APIResult<bool>> RegisterUser(RegisterRequest request)
         {
             var checkName = await _userManager.FindByNameAsync(request.UserLogin);
             if (checkName != null)
-                throw new Exception($"{request.UserLogin} have already exits..., try to annother");
+                return new APIFailResult<bool>($"{request.UserLogin} have already exits..., try to annother");
 
             var checkEmail = await _userManager.FindByEmailAsync(request.Email);
             if (checkEmail != null)
-                throw new Exception($"{request.Email} have already exits..., try to annother");
+                return new APIFailResult<bool>($"{request.Email} have already exits..., try to annother");
 
             if (request.PassWord != request.PassWordConfirm)
-                throw new Exception($"Check again {request.PassWord} and {request.PassWordConfirm} ");
+                return new APIFailResult<bool>($"Check again {request.PassWord} and {request.PassWordConfirm} ");
 
             var newUser = new AppUser
             {
@@ -150,8 +156,8 @@ namespace ShopWebApplication.Catalog.User
             };
             var result = await _userManager.CreateAsync(newUser, request.PassWord);
             if (!result.Succeeded)
-                result.Errors.ToList().ForEach(error => throw new Exception(error.Description));
-            return true;
+                return new APIFailResult<bool>(result.Errors.ToString());
+            return new APISuccessResult<bool>();
         }
 
         public async Task<PageResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request)
@@ -178,6 +184,23 @@ namespace ShopWebApplication.Catalog.User
                 TotalRecord = totalUser
             };
             return pageUser;
+        }
+
+        public async Task<APIResult<UserViewModel>> GetById(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                return new APIFailResult<UserViewModel>("ID khong ton tai");
+            var userViewModel = new UserViewModel()
+            {
+                id = id,
+                FullName = user.FullName,
+                Email = user.Email,
+                UserPhone = user.PhoneNumber,
+                DOB = user.DOB
+            };
+
+            return new APISuccessResult<UserViewModel>(userViewModel);
         }
     }
 }

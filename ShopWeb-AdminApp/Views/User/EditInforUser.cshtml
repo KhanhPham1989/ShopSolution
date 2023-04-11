@@ -1,9 +1,9 @@
 ﻿@{ Layout = null; }
 @using ShopWebModels.Catalog.User
-@model RegisterRequest
+@model EditRequest
 
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "EditInforUser";
 }
 
 <!DOCTYPE html>
@@ -27,55 +27,42 @@
                         <div class="col-lg-7">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
                                 <div class="small"><a asp-action="Index" asp-controller="User">Back to list</a></div>
-                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Register Account</h3></div>
+                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Update Information</h3></div>
                                 <div class="card-body">
-                                    <form asp-action="Register" asp-controller="User" method="post">
+                                    <form asp-action="EditInforUser" asp-controller="User">
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                         <div class="row mb-9">
                                             <div class="col-md-9">
                                                 <label asp-for="FullName" class="control-label"></label>
-                                                <input asp-for="FullName" class="form-control" />
+                                                <input asp-for="@Model.FullName" class="form-control" />
                                                 <span asp-validation-for="FullName" class="text-danger"></span>
                                             </div>
                                             <div class="col-md-9">
-                                                <label asp-for="UserLogin" class="control-label">Your Account</label>
-                                                <input asp-for="UserLogin" class="form-control" />
-                                                <span asp-validation-for="UserLogin" class="text-danger"></span>
-                                            </div>
-                                            <div class="col-md-9">
-                                                <label asp-for="PassWord" class="control-label">Your PassWord</label>
-                                                <input asp-for="PassWord" class="form-control" />
-                                                <span asp-validation-for="PassWord" class="text-danger"></span>
-                                            </div>
-
-                                            <div class="col-md-9">
-                                                <label asp-for="PassWordConfirm" class="control-label">Confirm Your PassWord</label>
-                                                <input asp-for="PassWordConfirm" class="form-control" />
-                                                <span asp-validation-for="PassWordConfirm" class="text-danger"></span>
-                                            </div>
-                                            <div class="col-md-9">
                                                 <label asp-for="Email" class="control-label">Your Email</label>
-                                                <input asp-for="Email" class="form-control" />
+                                                <input asp-for="@Model.Email" class="form-control" />
                                                 <span asp-validation-for="Email" class="text-danger"></span>
                                             </div>
                                             <div class="col-md-9">
                                                 <label asp-for="UserPhone" class="control-label">Your UserPhone</label>
-                                                <input asp-for="UserPhone" class="form-control" />
+                                                <input asp-for="@Model.UserPhone" class="form-control" />
                                                 <span asp-validation-for="UserPhone" class="text-danger"></span>
                                             </div>
                                             <div class="col-md-9">
                                                 <label asp-for="DOB" class="control-label">Your Birthday</label>
-                                                <input asp-for="DOB" class="form-control" type="date" />
+                                                <input asp-for="@Model.DOB" class="form-control" type="date" />
                                                 <span asp-validation-for="DOB" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="mt-4 mb-0">
                                             <div class="d-grid">
                                                 <button class="btn btn-primary btn-block mb-4"
-                                                        type="submit" asp-action="Register" asp-controller="User">
-                                                    Create Account
+                                                        type="submit" value="save">
+                                                    Agree to change
                                                 </button>
-                                                <button class="btn btn-primary btn-block mb-4" type="reset" value="reset">Reset</button>
+                                                <button class="btn btn-primary btn-block mb-4" type="submit"
+                                                        asp-action="Index" asp-controller="User">
+                                                    Back to List
+                                                </button>
                                             </div>
                                         </div>
                                     </form>

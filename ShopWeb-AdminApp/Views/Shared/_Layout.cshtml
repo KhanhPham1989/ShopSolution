@@ -30,10 +30,10 @@
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="/Profile/Index">@User.Identity.Name</a></li>
-                    <li><a class="dropdown-item" asp-action="Index" asp-controller="User">Danh sach</a></li>
+                    <li><button class="dropdown-item" asp-action="Index" asp-controller="User">Danh sach</button></li>
                     <li>
                         <hr class="dropdown-divider" />
-                        <form asp-controller="User" asp-action="Logout" method="post">
+                        <form asp-controller="User" asp-action="Logout">
                             <button class="dropdown-item" type="submit" value="Logout">Sign out</button>
                         </form>
                     </li>

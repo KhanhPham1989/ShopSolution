@@ -2,6 +2,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ namespace ShopWeb_AdminApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
+            services.AddHttpContextAccessor();
             services.AddTransient<IUserService, UserService>();
 
             services.AddControllersWithViews().AddFluentValidation(fw =>
@@ -36,7 +38,9 @@ namespace ShopWeb_AdminApp
                 fw.RegisterValidatorsFromAssemblyContaining<RegisterValidate>();
             });
 
-            services.AddSession(opt => opt.IdleTimeout = TimeSpan.FromMinutes(30)); // gan thoi gian cho session
+            services.AddSession(opt => opt.IdleTimeout = TimeSpan.FromMinutes(5)); // gan thoi gian cho session
+
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
             IMvcBuilder builder = services.AddRazorPages();
             var enviroments = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
