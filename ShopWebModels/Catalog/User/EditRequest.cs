@@ -16,5 +16,6 @@ namespace ShopWebModels.Catalog.User
 
         public string UserPhone { get; set; }
         public string Email { get; set; }
+        public Guid id { get; set; }
     }
 }

@@ -21,5 +21,9 @@ namespace ShopWebModels.Common
             Success = false;
             ValidationError = validationError;
         }
+
+        public APIFailResult()
+        {
+        }
     }
 }

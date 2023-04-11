@@ -112,11 +112,11 @@ namespace ShopWebApplication.Catalog.User
             return true;
         }
 
-        public async Task<APIResult<UserViewModel>> EditUser(Guid id, EditRequest request)
+        public async Task<APIResult<bool>> EditUser(Guid id, EditRequest request)
         {
             var checkuser = await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id);
-            if (!checkuser)
-                return new APIFailResult<UserViewModel>("Email da ton tai");
+            if (checkuser)
+                return new APIFailResult<bool>("Email da ton tai");
 
             var user = await _userManager.FindByIdAsync(id.ToString());
 
@@ -124,17 +124,13 @@ namespace ShopWebApplication.Catalog.User
             user.FullName = request.FullName;
             user.PhoneNumber = request.UserPhone;
             user.DOB = request.DOB;
+
             var result = await _userManager.UpdateAsync(user);
+
             if (!result.Succeeded)
                 result.Errors.ToList().ForEach(error => new APIFailResult<bool>(error.Description));
 
-            var User = new UserViewModel()
-            {
-                FullName = user.FullName,
-                Email = user.Email,
-                UserPhone = user.PhoneNumber
-            };
-            return new APISuccessResult<UserViewModel>(User);
+            return new APISuccessResult<bool>();
         }
 
         public async Task<APIResult<bool>> RegisterUser(RegisterRequest request)
@@ -201,6 +197,7 @@ namespace ShopWebApplication.Catalog.User
                 FullName = user.FullName,
                 Email = user.Email,
                 UserPhone = user.PhoneNumber,
+                DOB = user.DOB
             };
 
             return new APISuccessResult<UserViewModel>(userViewModel);

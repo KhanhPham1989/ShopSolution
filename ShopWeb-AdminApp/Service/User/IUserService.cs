@@ -15,7 +15,7 @@ namespace ShopWeb_AdminApp.Service.User //adminapp
 
         Task<APIResult<bool>> UpdateUser(Guid id, EditRequest request);
 
-        Task<APIResult<PageResult<UserViewModel>>> GetUserPaging(GetUserPagingRequest request);
+        Task<PageResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request);
 
         Task<APIResult<UserViewModel>> GetById(Guid id);
     }

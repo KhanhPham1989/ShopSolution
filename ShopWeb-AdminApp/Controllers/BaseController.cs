@@ -17,6 +17,7 @@ namespace ShopWeb_AdminApp.Controllers
             var session = context.HttpContext.Session.GetString("Token");
             if (session == null)
                 context.Result = new RedirectToActionResult("Index", "Login", null);
+
             base.OnActionExecuting(context);
         }
     }

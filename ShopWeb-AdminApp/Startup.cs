@@ -38,7 +38,7 @@ namespace ShopWeb_AdminApp
                 fw.RegisterValidatorsFromAssemblyContaining<RegisterValidate>();
             });
 
-            services.AddSession(opt => opt.IdleTimeout = TimeSpan.FromMinutes(30)); // gan thoi gian cho session
+            services.AddSession(opt => opt.IdleTimeout = TimeSpan.FromMinutes(5)); // gan thoi gian cho session
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 

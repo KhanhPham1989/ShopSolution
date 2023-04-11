@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,11 +22,13 @@ namespace ShopWeb_AdminApp.Controllers
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _config;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LoginController(IUserService userService, IConfiguration Iconfiguration)
+        public LoginController(IUserService userService, IConfiguration Iconfiguration, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
             _config = Iconfiguration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -34,6 +37,7 @@ namespace ShopWeb_AdminApp.Controllers
             // bat buoc log out nhung session cu khi vao login
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
+            // _httpContextAccessor.HttpContext.Session.Remove("Token");
             return View();
         }
 
@@ -48,23 +52,23 @@ namespace ShopWeb_AdminApp.Controllers
                 }
             }
 
-            var result = await _userService.LoginAuthenticate(request);
-            var userPrinciple = this.ValidateToken(result);
+            var token = await _userService.LoginAuthenticate(request);
+            var userPrinciple = this.ValidateToken(token);
             var auth = new AuthenticationProperties()
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(5),
                 IsPersistent = true,
 
                 //nhận hoặc đặt xem phiên xác thực có được duy trì qua nhiều yêu cầu hay khong
             };
-            HttpContext.Session.SetString("Token", result);
+            HttpContext.Session.SetString("Token", token);
 
             await HttpContext.SignInAsync(
                                             scheme: CookieAuthenticationDefaults.AuthenticationScheme,
                                             principal: userPrinciple,
                                             properties: auth);
             // pt nhan 2 hoac 3 tham so, => string cookie, Priciple, 1 thiet lap thoi gian
-            return RedirectToAction(nameof(Index), "Home");
+            return RedirectToAction("Index", "Home");
         }
 
         private ClaimsPrincipal ValidateToken(string jwtToken)

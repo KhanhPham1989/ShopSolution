@@ -60,7 +60,7 @@
                     </td>
 
                     <td>
-                        <a asp-action="Edit" asp-controller="User" asp-route-id="@item.id" class="btn btn-info">Edit</a> &nbsp;|&nbsp;
+                        @Html.ActionLink("EditInforUser", "EditInforUser", new { id = item.id })
                         <a asp-action="Delete" asp-controller="User" asp-route-id="@item.id" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>

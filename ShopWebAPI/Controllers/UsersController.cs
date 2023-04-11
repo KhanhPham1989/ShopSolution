@@ -30,7 +30,7 @@ namespace ShopWebAPI.Controllers
             if (string.IsNullOrEmpty(result))
                 return BadRequest("UserName or Password is incorrect");
 
-            HttpContext.Session.GetString(result); // luu vao session
+            //HttpContext.Session.GetString(result); // luu vao session
             return Ok(result);
         }
 
@@ -64,16 +64,16 @@ namespace ShopWebAPI.Controllers
 
         //PUT : http://locolhost/api/Users/EditInfoUser/id
         [HttpPut("EditInforUser/{id}")]
-        public async Task<IActionResult> EditInforUser(Guid id, [FromForm] EditRequest request)
+        public async Task<IActionResult> EditInforUser(Guid id, [FromBody] EditRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var reset = await _userService.EditUser(id, request);
-            if (reset == null)
-                return BadRequest(reset.Message);
+            var result = await _userService.EditUser(id, request);
+            if (!result.Success)
+                return BadRequest(result);
 
-            return Ok(reset.ObjResult);
+            return Ok(result);
         }
 
         //http://localhost/api/Users/GetUserPaging?pageIndex=1&pageSize=10&keyword=
@@ -88,13 +88,13 @@ namespace ShopWebAPI.Controllers
             return null;
         }
 
-        [HttpGet("GetUserById/{id}")]
-        public async Task<IActionResult> GetUserById([FromQuery] Guid id)
+        [HttpGet("EditInforUser/{id}")]
+        public async Task<IActionResult> GetUserById(Guid id)
         {
             var UserList = await _userService.GetById(id);
             if (UserList.Success)
             {
-                return Ok(UserList.ObjResult);
+                return Ok(UserList);
             }
             return BadRequest(UserList.Message);
         }

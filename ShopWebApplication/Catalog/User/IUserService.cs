@@ -14,7 +14,7 @@ namespace ShopWebApplication.Catalog.User
 
         Task<APIResult<bool>> RegisterUser(RegisterRequest request);
 
-        Task<APIResult<UserViewModel>> EditUser(Guid id, EditRequest request);
+        Task<APIResult<bool>> EditUser(Guid id, EditRequest request);
 
         Task<bool> ChangPassWord(string userlogin, ChangePassWord request);
 
