@@ -29,9 +29,14 @@
                                 <div class="small"><a asp-action="Index" asp-controller="User">Back to list</a></div>
                                 <div class="card-header"><h3 class="text-center font-weight-light my-4">Update Information</h3></div>
                                 <div class="card-body">
-                                    <form asp-action="EditInforUser" asp-controller="User">
-                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <div class="row mb-9">
+                                    <div class="row mb-9">
+                                        <form asp-action="EditInforUser" asp-controller="User" method="post">
+                                            <div asp-validation-summary="All" class="text-danger"></div>
+                                            <div class="col-md-9" hidden>
+                                                <label asp-for="id" id="@Model.id" class="control-label"></label>
+                                                <input asp-for="@Model.id" class="form-control" />
+                                                <span asp-validation-for="id" class="text-danger"></span>
+                                            </div>
                                             <div class="col-md-9">
                                                 <label asp-for="FullName" class="control-label"></label>
                                                 <input asp-for="@Model.FullName" class="form-control" />
@@ -52,24 +57,24 @@
                                                 <input asp-for="@Model.DOB" class="form-control" type="date" />
                                                 <span asp-validation-for="DOB" class="text-danger"></span>
                                             </div>
-                                        </div>
-                                        <div class="mt-4 mb-0">
-                                            <div class="d-grid">
-                                                <button class="btn btn-primary btn-block mb-4"
-                                                        type="submit" value="save">
-                                                    Agree to change
-                                                </button>
-                                                <button class="btn btn-primary btn-block mb-4" type="submit"
-                                                        asp-action="Index" asp-controller="User">
-                                                    Back to List
-                                                </button>
+                                            <div class="mt-4 mb-0 ">
+                                                <div class="d-grid">
+                                                    <button class="btn btn-primary btn-block mb-4"
+                                                            asp-action="EditInforUser" asp-route-id="@Model.id" type="submit">
+                                                        Agree to change
+                                                    </button>
+                                                    <button class="btn btn-primary btn-block mb-4" type="submit"
+                                                            asp-action="Index" asp-controller="User">
+                                                        Back to List
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
-                                <div class="card-footer text-center py-3">
-                                    <div class="small"><a asp-action="Index" asp-controller="Login">Have an account? Go to login</a></div>
-                                </div>
+                            </div>
+                            <div class="card-footer text-center py-3">
+                                <div class="small"><a asp-action="Index" asp-controller="Login">Have an account? Go to login</a></div>
                             </div>
                         </div>
                     </div>

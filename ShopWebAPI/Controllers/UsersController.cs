@@ -63,16 +63,21 @@ namespace ShopWebAPI.Controllers
         }
 
         //PUT : http://locolhost/api/Users/EditInfoUser/id
-        [HttpPut("EditInforUser/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> EditInforUser(Guid id, [FromBody] EditRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _userService.EditUser(id, request);
+            var result = await _userService.EditUser(request.id, request);
             if (!result.Success)
-                return BadRequest(result);
-
+            {
+                if (result.Message == null)
+                {
+                    return BadRequest("Server khong ket noi duoc");
+                }
+                return BadRequest(result.Message);
+            }
             return Ok(result);
         }
 
@@ -85,10 +90,10 @@ namespace ShopWebAPI.Controllers
             {
                 return Ok(UserList);
             }
-            return null;
+            return BadRequest("khong ton tai acc nao");
         }
 
-        [HttpGet("EditInforUser/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var UserList = await _userService.GetById(id);
@@ -97,6 +102,17 @@ namespace ShopWebAPI.Controllers
                 return Ok(UserList);
             }
             return BadRequest(UserList.Message);
+        }
+
+        [HttpDelete("DeleteAsync/{id}")]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            var result = await _userService.DeleteUser(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest("Check user");
         }
     }
 }

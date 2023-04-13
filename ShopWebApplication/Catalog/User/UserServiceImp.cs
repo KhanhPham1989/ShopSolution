@@ -112,25 +112,37 @@ namespace ShopWebApplication.Catalog.User
             return true;
         }
 
-        public async Task<APIResult<bool>> EditUser(Guid id, EditRequest request)
+        public async Task<APIResult<UserViewModel>> EditUser(Guid id, EditRequest request)
         {
             var checkuser = await _userManager.Users.AnyAsync(x => x.Email == request.Email && x.Id != id);
             if (checkuser)
-                return new APIFailResult<bool>("Email da ton tai");
+                return new APIFailResult<UserViewModel>("Email da ton tai");
 
             var user = await _userManager.FindByIdAsync(id.ToString());
-
-            user.Email = request.Email;
-            user.FullName = request.FullName;
-            user.PhoneNumber = request.UserPhone;
-            user.DOB = request.DOB;
+            if (user != null)
+            {
+                user.Email = request.Email;
+                user.FullName = request.FullName;
+                user.PhoneNumber = request.UserPhone;
+                user.DOB = request.DOB;
+                user.Id = request.id;
+            }
 
             var result = await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
-                result.Errors.ToList().ForEach(error => new APIFailResult<bool>(error.Description));
+                return new APIFailResult<UserViewModel>("Khong thanh cong");
 
-            return new APISuccessResult<bool>();
+            var userUpdate = new UserViewModel()
+            {
+                id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                UserPhone = user.PhoneNumber,
+                DOB = user.DOB
+            };
+
+            return new APISuccessResult<UserViewModel>(userUpdate);
         }
 
         public async Task<APIResult<bool>> RegisterUser(RegisterRequest request)
@@ -165,9 +177,33 @@ namespace ShopWebApplication.Catalog.User
             var querry = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
             {
-                querry = querry.Where(x => x.UserName.Contains(request.Keyword) || x.Email.Contains(request.Keyword));
+                querry = querry.Where(x =>
+                    x.UserName.Contains(request.Keyword) ||
+                    x.Email.Contains(request.Keyword) ||
+                    x.FullName.Equals(request.Keyword) ||
+                    x.PhoneNumber.Equals(request.Keyword));
             }
+            if (!querry.Any())
+            {
+                var userList = _userManager.Users;
+                var totalnull = await userList.CountAsync();
+                var data = await userList.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
+                          .Select(x => new UserViewModel()
+                          {
+                              id = x.Id,
+                              FullName = x.FullName,
+                              Email = x.Email,
+                              UserPhone = x.PhoneNumber,
+                              DOB = x.DOB
+                          }).ToListAsync();
 
+                var page = new PageResult<UserViewModel>()
+                {
+                    Item = data,
+                    TotalRecord = totalnull
+                };
+                return page;
+            }
             var totalUser = await querry.CountAsync();
             var resurl = await querry.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
                           .Select(x => new UserViewModel()
@@ -175,7 +211,8 @@ namespace ShopWebApplication.Catalog.User
                               id = x.Id,
                               FullName = x.FullName,
                               Email = x.Email,
-                              UserPhone = x.PhoneNumber
+                              UserPhone = x.PhoneNumber,
+                              DOB = x.DOB
                           }).ToListAsync();
 
             var pageUser = new PageResult<UserViewModel>()
@@ -201,6 +238,17 @@ namespace ShopWebApplication.Catalog.User
             };
 
             return new APISuccessResult<UserViewModel>(userViewModel);
+        }
+
+        public async Task<APIResult<bool>> DeleteUser(Guid id)
+        {
+            var resurl = await _userManager.FindByIdAsync(id.ToString());
+            if (resurl != null)
+            {
+                await _userManager.DeleteAsync(resurl);
+                return new APISuccessResult<bool>();
+            }
+            return new APIFailResult<bool>("Check again information");
         }
     }
 }

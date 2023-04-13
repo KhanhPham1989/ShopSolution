@@ -53,6 +53,11 @@ namespace ShopWeb_AdminApp.Controllers
             }
 
             var token = await _userService.LoginAuthenticate(request);
+            if (string.IsNullOrEmpty(token))
+            {
+                ModelState.AddModelError("", "Wrong User Name or PassWord");
+                return View();
+            }
             var userPrinciple = this.ValidateToken(token);
             var auth = new AuthenticationProperties()
             {
@@ -68,6 +73,7 @@ namespace ShopWeb_AdminApp.Controllers
                                             principal: userPrinciple,
                                             properties: auth);
             // pt nhan 2 hoac 3 tham so, => string cookie, Priciple, 1 thiet lap thoi gian
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -78,14 +84,14 @@ namespace ShopWeb_AdminApp.Controllers
             //var TokenIssuer = AppsettingRoot["Issuer"];
             IdentityModelEventSource.ShowPII = true;
 
-            SecurityToken validateToken;
+            SecurityToken ValidateToken;
             TokenValidationParameters validationParameters = new TokenValidationParameters();
             validationParameters.ValidateLifetime = true; // kiem soat token moi luc
             validationParameters.ValidAudience = _config["Token:Issuer"];
             validationParameters.ValidIssuer = _config["Token:Issuer"];
             validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
 
-            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validateToken);
+            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out ValidateToken);
             return principal;
         }
     }

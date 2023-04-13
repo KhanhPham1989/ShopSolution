@@ -85,7 +85,7 @@ namespace ShopWeb_AdminApp.Service.User
             return JsonConvert.DeserializeObject<APIFailResult<bool>>(data);
         }
 
-        public async Task<APIResult<bool>> UpdateUser(Guid id, EditRequest request)
+        public async Task<APIResult<UserViewModel>> UpdateUser(Guid id, EditRequest request)
         {
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClientFactory.CreateClient();
@@ -94,14 +94,37 @@ namespace ShopWeb_AdminApp.Service.User
             var Jsonstring = JsonConvert.SerializeObject(request);
             var httpcontext = new StringContent(Jsonstring, Encoding.UTF8, "application/json");
 
-            var response = await client.PutAsync($"/api/Users/EditInforUser/{id}", httpcontext);
+            var response = await client.PutAsync($"/api/Users/{id}", httpcontext);
             var data = await response.Content.ReadAsStringAsync();
+
             if (response.IsSuccessStatusCode)
             {
-                var result = JsonConvert.DeserializeObject<APISuccessResult<bool>>(data);
-                return result;
+                var result = JsonConvert.DeserializeObject<APISuccessResult<UserViewModel>>(data);
+                var user = result.ObjResult;
+                var UserUpdate = new UserViewModel()
+                {
+                    id = user.id,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    UserPhone = user.UserPhone,
+                    DOB = user.DOB
+                };
+                return new APISuccessResult<UserViewModel>(UserUpdate);
             }
-            return JsonConvert.DeserializeObject<APIFailResult<bool>>(data);
+            if (response.Content.Headers.Contains("a"))
+            {
+                return new APIFailResult<UserViewModel>("Khong ket noi duoc server");
+            }
+            if (response.StatusCode.Equals(500))
+            {
+                return new APIFailResult<UserViewModel>(data);
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                return new APIFailResult<UserViewModel>(response.ReasonPhrase);
+            }
+
+            return JsonConvert.DeserializeObject<APIFailResult<UserViewModel>>(data);
         }
 
         public async Task<APIResult<UserViewModel>> GetById(Guid id)
@@ -110,7 +133,7 @@ namespace ShopWeb_AdminApp.Service.User
             var client = _httpClientFactory.CreateClient();
             client.BaseAddress = new Uri(_config["Uri"]);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-            var response = await client.GetAsync($"/api/Users/EditInforUser/{id}");
+            var response = await client.GetAsync($"/api/Users/{id}");
             var data = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
@@ -127,6 +150,23 @@ namespace ShopWeb_AdminApp.Service.User
             }
             var failResult = JsonConvert.DeserializeObject<APIFailResult<UserViewModel>>(data);
             return failResult;
+        }
+
+        public async Task<APIResult<bool>> Delete(Guid id)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            client.BaseAddress = new Uri(_config["Uri"]);
+
+            var respone = await client.DeleteAsync($"/api/Users/DeleteAsync/{id}");
+            var data = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<APISuccessResult<bool>>(data);
+            }
+            var result = JsonConvert.DeserializeObject<APIFailResult<bool>>("Check again");
+            return result;
         }
     }
 }
