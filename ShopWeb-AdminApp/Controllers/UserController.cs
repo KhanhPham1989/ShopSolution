@@ -25,6 +25,9 @@ namespace ShopWeb_AdminApp.Controllers
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
+        [TempData]
+        public string thongbao { get; set; }
+
         public UserController(IUserService userService, IConfiguration Iconfiguration, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
@@ -44,6 +47,10 @@ namespace ShopWeb_AdminApp.Controllers
                 Keyword = Keyword
             };
             var data = await _userService.GetUserPaging(GetUser);
+            if (!string.IsNullOrEmpty(thongbao))
+            {
+                ViewBag.message = thongbao;
+            };
             return View(data);
         }
 
@@ -80,7 +87,7 @@ namespace ShopWeb_AdminApp.Controllers
                 return View(request);
             }
 
-            return RedirectToAction(nameof(Index), "Home");
+            return RedirectToAction(nameof(Index), "Login");
         }
 
         [HttpGet]
@@ -96,7 +103,7 @@ namespace ShopWeb_AdminApp.Controllers
                     Email = user.Email,
                     UserPhone = user.UserPhone,
                     DOB = user.DOB,
-                    id = id
+                    id = user.id
                 };
                 return View(UserUpdateRequet);
             }
@@ -104,17 +111,84 @@ namespace ShopWeb_AdminApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditInforUser(EditRequest request)
+        public async Task<IActionResult> EditInforUser(Guid id, EditRequest request)
         {
             if (!ModelState.IsValid)
                 return View();
-            var resurl = await _userService.UpdateUser(request.id, request);
+
+            var resurl = await _userService.UpdateUser(id, request);
+
+            //ModelState.AddModelError("", resurl.Message);
+            //return View(request);
+
             if (resurl.Success)
+            {
+                thongbao = $"Ban vua cap nhat thanh cong tai khoan {request.FullName} ";
+                return RedirectToAction("Index", "User");
+            }
+            if (resurl.Message != null)
+            {
+                return BadRequest(resurl.Message);
+            }
+            else
             {
                 return RedirectToAction("Index", "User");
             }
-            ModelState.AddModelError("", resurl.Message);
-            return View(request);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var result = await _userService.GetById(id);
+            if (result.Success)
+            {
+                var user = result.ObjResult;
+                var UserInformation = new UserViewModel()
+                {
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    UserPhone = user.UserPhone,
+                    DOB = user.DOB,
+                    id = user.id
+                };
+                return View(UserInformation);
+            }
+            return BadRequest($"{id} khong ton tai, kiem tra lai");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _userService.GetById(id);
+            if (result.Success)
+            {
+                var user = result.ObjResult;
+                var UserInformation = new UserViewModel()
+                {
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    UserPhone = user.UserPhone,
+                    DOB = user.DOB,
+                    id = user.id
+                };
+                return View(UserInformation);
+            }
+            return BadRequest($"{id} khong ton tai, kiem tra lai");
+        }
+
+        private string Name { get; set; }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(UserViewModel request)
+        {
+            Name = request.FullName;
+            var result = await _userService.Delete(request.id);
+            if (result.Success == true)
+            {
+                thongbao = $"bạn vừa xóa tai khoan {Name} thanh cong ";
+                return RedirectToAction("Index", "User");
+            }
+            return BadRequest(result.Message);
         }
     }
 }

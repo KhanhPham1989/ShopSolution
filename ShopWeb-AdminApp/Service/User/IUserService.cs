@@ -13,10 +13,12 @@ namespace ShopWeb_AdminApp.Service.User //adminapp
 
         Task<APIResult<bool>> Register(RegisterRequest request);
 
-        Task<APIResult<bool>> UpdateUser(Guid id, EditRequest request);
+        Task<APIResult<UserViewModel>> UpdateUser(Guid id, EditRequest request);
 
         Task<PageResult<UserViewModel>> GetUserPaging(GetUserPagingRequest request);
 
         Task<APIResult<UserViewModel>> GetById(Guid id);
+
+        Task<APIResult<bool>> Delete(Guid id);
     }
 }
