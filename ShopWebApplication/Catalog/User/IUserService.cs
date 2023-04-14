@@ -23,5 +23,7 @@ namespace ShopWebApplication.Catalog.User
         Task<APIResult<UserViewModel>> GetById(Guid id);
 
         Task<APIResult<bool>> DeleteUser(Guid id);
+
+        Task<APIResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShopWebApplication.Catalog.Products;
+using ShopWebApplication.Catalog.RoleCata;
 using ShopWebApplication.Catalog.User;
 using ShopWebApplication.Common;
 using ShopWebData.DbContextData;
@@ -54,6 +55,8 @@ namespace ShopWebAPI
             services.AddTransient<IUserService, UserServiceImp>();
             services.AddTransient<IValidator<LoginRequest>, LoginValidate>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterValidate>();
+            services.AddTransient<IRolesService, RolesServiceImp>();
+            // services.AddTransient<RoleManager<Role>, RoleManager<Role>>();
 
             services.AddControllers().AddFluentValidation(fw =>
             {

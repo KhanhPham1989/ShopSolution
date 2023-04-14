@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,9 @@ namespace ShopWebData.Entities
         public List<SystemActivities> SystemActivities { get; set; }
         public List<Cart> Carts { get; set; }
         public List<Transaction> Transactions { get; set; }
-        // public List<UserRole> userRoles { get; set; }
+        public List<UserRole> userRoles { get; set; } = new List<UserRole>();
+
+        [NotMapped]
+        public IList<string> roles { get; set; }
     }
 }

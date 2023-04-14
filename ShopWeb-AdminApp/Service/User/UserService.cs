@@ -144,7 +144,8 @@ namespace ShopWeb_AdminApp.Service.User
                     FullName = result.ObjResult.FullName,
                     Email = result.ObjResult.Email,
                     UserPhone = result.ObjResult.UserPhone,
-                    DOB = result.ObjResult.DOB
+                    DOB = result.ObjResult.DOB,
+                    RoleUser = result.ObjResult.RoleUser
                 };
                 return new APISuccessResult<UserViewModel>(user);
             }
@@ -167,6 +168,25 @@ namespace ShopWeb_AdminApp.Service.User
             }
             var result = JsonConvert.DeserializeObject<APIFailResult<bool>>("Check again");
             return result;
+        }
+
+        public async Task<APIResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
+        {
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_config["Uri"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var jsonString = JsonConvert.SerializeObject(request);
+            var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            var respone = await client.PutAsync($"/api/Users/{id}/RoleAsign", content);
+            var data = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+            {
+                var resurl = JsonConvert.DeserializeObject<APISuccessResult<bool>>(data);
+                return resurl;
+            }
+
+            return JsonConvert.DeserializeObject<APIFailResult<bool>>(data);
         }
     }
 }

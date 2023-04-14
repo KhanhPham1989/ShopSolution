@@ -114,5 +114,23 @@ namespace ShopWebAPI.Controllers
             }
             return BadRequest("Check user");
         }
+
+        [HttpPut("{id}/RoleAsign")]
+        public async Task<IActionResult> RoleAsign(Guid id, [FromBody] RoleAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _userService.RoleAssign(id, request);
+            if (!result.Success)
+            {
+                if (result.Message == null)
+                {
+                    return BadRequest("Server khong ket noi duoc");
+                }
+                return BadRequest(result.Message);
+            }
+            return Ok(result);
+        }
     }
 }

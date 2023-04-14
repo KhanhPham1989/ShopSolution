@@ -4,6 +4,7 @@ using ShopWebApplication.Common;
 using ShopWebData.DbContextData;
 using ShopWebData.Entities;
 using ShopWebException.TeduException;
+using ShopWebModels.Catalog;
 using ShopWebModels.Catalog.Images;
 using ShopWebModels.Catalog.Products;
 using ShopWebModels.Common;
@@ -257,6 +258,19 @@ namespace ShopWebApplication.Catalog.Products
             return await data.SaveChangesAsync();
         }
 
+        public async Task<RoleViewModel> roleViewModel(Guid id)
+        {
+            var user = await data.userRoles.Where(x => x.UserId == id).SingleOrDefaultAsync();
+            var role = await data.Roles.Where(x => x.Id == user.RoleId).SingleOrDefaultAsync();
+            var userView = new RoleViewModel()
+            {
+                Id = id,
+                Name = role.Name,
+                Description = role.Description
+            };
+            return userView;
+        }
+
         public async Task<int> Update(ProductEditRequest request)
         {
             var product = await data.Products.FindAsync(request.Proid);
@@ -326,6 +340,11 @@ namespace ShopWebApplication.Catalog.Products
                 resurl.ViewCount += 1;
                 await data.SaveChangesAsync();
             }
+        }
+
+        Task<List<ProductViewModel>> IManageProductService.GetAll()
+        {
+            throw new NotImplementedException();
         }
 
         private async Task<string> SaveFile(IFormFile file)

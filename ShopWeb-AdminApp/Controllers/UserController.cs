@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using ShopWeb_AdminApp.Service.RoleClient;
 using ShopWeb_AdminApp.Service.User;
 using ShopWebModels.Catalog.User;
 using ShopWebModels.Common;
@@ -24,15 +25,17 @@ namespace ShopWeb_AdminApp.Controllers
         private readonly IUserService _userService;
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IRoleClientService _roleClientService;
 
         [TempData]
         public string thongbao { get; set; }
 
-        public UserController(IUserService userService, IConfiguration Iconfiguration, IHttpContextAccessor httpContextAccessor)
+        public UserController(IRoleClientService roleClientService, IUserService userService, IConfiguration Iconfiguration, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
             _config = Iconfiguration;
             _httpContextAccessor = httpContextAccessor;
+            _roleClientService = roleClientService;
         }
 
         public async Task<IActionResult> Index(string Keyword, int PageIndex = 1, int PageSize = 10)
@@ -189,6 +192,55 @@ namespace ShopWeb_AdminApp.Controllers
                 return RedirectToAction("Index", "User");
             }
             return BadRequest(result.Message);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RoleAssign(Guid id)
+        {
+            var result = await GetAllRoleAssign(id);
+            if (result != null)
+            {
+                return View(result);
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RoleAssign(RoleAssignRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var resurl = await _userService.RoleAssign(request.id, request);
+            if (resurl.Success)
+            {
+                thongbao = "Cap nhat quyen thanh cong";
+                return RedirectToAction("Index", "User");
+            }
+
+            ModelState.AddModelError("", resurl.Message);
+            var userRoleAssign = await GetAllRoleAssign(request.id);
+            return View(userRoleAssign);
+        }
+
+        private async Task<RoleAssignRequest> GetAllRoleAssign(Guid id)
+        {
+            var userRole = await _userService.GetById(id);  // lay role trong user
+
+            var AllRoles = await _roleClientService.GetAllRole(); // lay tat ca role
+            var UserRoleAssign = new RoleAssignRequest(); //
+            foreach (var role in AllRoles.ObjResult)
+            {
+                // UserRoleAssign.id = id;
+                var check = new Role_Selected()
+                {
+                    IdRole = role.Id.ToString(),
+                    Name = role.Name,
+                    Selected = userRole.ObjResult.RoleUser.Contains(role.Name),
+                };
+                UserRoleAssign.Roles.Add(check);
+            }
+            return UserRoleAssign;
         }
     }
 }
