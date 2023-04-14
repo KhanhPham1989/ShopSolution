@@ -16,5 +16,7 @@ namespace ShopWebModels.Catalog.User
 
         [DataType(DataType.Date)]
         public DateTime DOB { get; set; }
+
+        public IList<string> RoleUser { get; set; }
     }
 }

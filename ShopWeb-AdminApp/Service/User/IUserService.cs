@@ -20,5 +20,7 @@ namespace ShopWeb_AdminApp.Service.User //adminapp
         Task<APIResult<UserViewModel>> GetById(Guid id);
 
         Task<APIResult<bool>> Delete(Guid id);
+
+        Task<APIResult<bool>> RoleAssign(Guid id, RoleAssignRequest request);
     }
 }

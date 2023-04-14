@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using ShopWebData.Entities;
+using ShopWebModels.Catalog;
 using ShopWebModels.Catalog.Images;
 using ShopWebModels.Catalog.Products;
 using ShopWebModels.Common;
@@ -21,7 +22,7 @@ namespace ShopWebApplication.Catalog.Products
 
         Task<ProductViewModel> GetById(int productId, int languageID);
 
-        Task<List<Product>> GetAll();
+        Task<List<ProductViewModel>> GetAll();
 
         //Task<List<ProductViewModel>> GetAllPaging(string key, int pageIndex, int pageSize);
         //PageViewModel 1 class tra ve dang list theo du lieu truyen vao <>;
@@ -46,5 +47,7 @@ namespace ShopWebApplication.Catalog.Products
         Task<ImageViewModels> GetImageById(int ImageId);
 
         Task<ProductViewModel> GetByIdNoLanguage(int productId);
+
+        Task<RoleViewModel> roleViewModel(Guid id);
     }
 }

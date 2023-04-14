@@ -165,5 +165,16 @@ namespace ShopWebAPI.Controllers
                 return Ok();
             return BadRequest();
         }
+
+        [HttpGet("RoleView/{id}")]
+        public async Task<IActionResult> roleViewModel(Guid id)
+        {
+            var user = await _manager.roleViewModel(id);
+            if (user.Name != null)
+            {
+                return Ok(user);
+            }
+            return BadRequest();
+        }
     }
 }

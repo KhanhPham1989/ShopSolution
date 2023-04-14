@@ -228,13 +228,16 @@ namespace ShopWebApplication.Catalog.User
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
                 return new APIFailResult<UserViewModel>("ID khong ton tai");
+
+            var userRole = await _userManager.GetRolesAsync(user);
             var userViewModel = new UserViewModel()
             {
                 id = id,
                 FullName = user.FullName,
                 Email = user.Email,
                 UserPhone = user.PhoneNumber,
-                DOB = user.DOB
+                DOB = user.DOB,
+                RoleUser = userRole
             };
 
             return new APISuccessResult<UserViewModel>(userViewModel);
@@ -249,6 +252,36 @@ namespace ShopWebApplication.Catalog.User
                 return new APISuccessResult<bool>();
             }
             return new APIFailResult<bool>("Check again information");
+        }
+
+        public async Task<APIResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(request.id.ToString());
+            if (user == null)
+            {
+                return new APIFailResult<bool>($"{request.id} khong ton tai");
+            }
+            else
+            {
+                var roleUser = await _userManager.GetRolesAsync(user);
+                user.roles = roleUser;
+                var removeRoles = request.Roles.Where(x => x.Selected == false).Select(x => x.Name).ToList();
+                await _userManager.RemoveFromRolesAsync(user, removeRoles);
+                var addRoles = request.Roles.Where(x => x.Selected == true).Select(x => x.Name).ToList();
+
+                foreach (var roleName in addRoles)
+                {
+                    // kiem tra user co chua role dc chon hay ko
+                    // var checkUserInRole = await _userManager.IsInRoleAsync(user, roleName);
+                    if (await _userManager.IsInRoleAsync(user, roleName) == false)
+                    {
+                        var check = await _userManager.AddToRoleAsync(user, roleName);
+                    }
+                }
+            }
+            // lay ra nhung role ko dc chon
+            return new APISuccessResult<bool>();
+            // return new APIFailResult<bool>();
         }
     }
 }

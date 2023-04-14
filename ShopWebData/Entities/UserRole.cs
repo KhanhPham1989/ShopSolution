@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -9,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace ShopWebData.Entities
 {
-    public class RoleIdentity : IdentityRole<Guid>
+    [Table("UserRole")]
+    public class UserRole : IdentityUserRole<Guid>
     {
-        [StringLength(200)]
-        public string Description { get; set; }
-
-        public List<UserRole> userRole { get; set; } = new List<UserRole>();
+        public AppUser appUser { get; set; }
+        public RoleIdentity roleIdentity { get; set; }
     }
 }
