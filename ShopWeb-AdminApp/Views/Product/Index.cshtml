@@ -1,19 +1,17 @@
-﻿@using ShopWebModels.Catalog.User
-@using ShopWebModels.Common;
-
-@model PageResult<UserViewModel>
+﻿@using ShopWebModels.Catalog.Products
+@using ShopWebModels.Common
+@model PageResult<ProductViewModel>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "/Views/Shared/_Layout.cshtml";
-
+    ViewData["Title"] = "Danh sach san pham";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-fluid">
-    <h1 class="mt-4">User List</h1>
+    <h1 class="mt-4">Product List</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="/">Trang chu</a></li>
-        <li class="breadcrumb-item active">Danh sach nguoi dung</li>
+        <li class="breadcrumb-item active">Danh sach san pham</li>
     </ol>
 </div>
 @{
@@ -45,7 +43,7 @@
     <div class="card-header">
         <div class="row">
             <div class="col-md-6 col-xl-12">
-                <a class="btn btn-success" asp-action="Register" asp-controller="User">Tao moi</a>
+                <a class="btn btn-success" asp-action="CreateProduct" asp-controller="Product">Tao moi</a>
             </div>
             <div class="col-md-6 col-xl-12">
                 <form asp-action="Index" method="get">
@@ -72,31 +70,34 @@
             <i class="fas fa-table me-1"></i>
             DataTable Example
         </div>
+
         <div class="card-body">
             <table id="datatablesSimple">
-                <thead>
+                <thead class="col mb-10">
                     <tr>
                         <th>STT</th>
-                        <th>Full Name</th>
-                        <th>Birthday</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
-                        <th>Last login</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>OriginalPrice</th>
+                        <th>Stock</th>
+                        <th>SeoAlias</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
                         <th>STT</th>
-                        <th>Full Name</th>
-                        <th>Birthday</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
-                        <th>Last login</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>OriginalPrice</th>
+                        <th>Stock</th>
+                        <th>SeoAlias</th>
+                        <th>Description</th>
                     </tr>
                 </tfoot>
 
                 <tbody>
-                    @if (Model.Item.Count > 0 || Model.Item != null)
+                    @if (Model.Item.Count > 0)
                     {
                         int stt = 1;
                         @foreach (var item in Model.Item)
@@ -107,29 +108,40 @@
                                     @(stt++)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.FullName)
+                                    @Html.DisplayFor(modelItem => item.ProductName)
+                                    @Html.DisplayFor(modelItem => item.ViewCount)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.DOB)
+                                    @Html.DisplayFor(modelItem => item.Price)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.UserPhone)
+                                    @Html.DisplayFor(modelItem => item.OriginalPrice)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Email)
+                                    @Html.DisplayFor(modelItem => item.Stock)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SeoAlias)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Description)
                                 </td>
 
                                 <td>
                                     <div class="row">
                                         <div class="col-sm-10">
-                                            <a asp-action="EditInforUser" asp-controller="User" asp-route-id="@item.id" class="btn btn-danger">Update</a>
-                                            <a asp-action="Details" asp-controller="User" asp-route-id="@item.id" class="btn btn-danger">Details</a>
+                                            <div class="col col-sm-5">
+                                                <a asp-action="EditInforUser" asp-controller="User" asp-route-id="@item.Id" class="btn btn-danger">Update</a>
+                                            </div>
+                                            <div class="col col-sm-5">
+                                                <a asp-action="Details" asp-controller="User" asp-route-id="@item.Id" class="btn btn-danger">Details</a>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-10">
-                                            <a asp-action="Delete" asp-controller="User" asp-route-id="@item.id" class="btn btn-danger">Delete</a>
-                                            <a asp-action="RoleAssign" asp-controller="User" asp-route-id="@item.id" class="btn btn-danger">Role Assign</a>
+                                            <a asp-action="Delete" asp-controller="User" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                                            <a asp-action="RoleAssign" asp-controller="User" asp-route-id="@item.Id" class="btn btn-danger">Role Assign</a>
                                         </div>
                                     </div>
                                 </td>

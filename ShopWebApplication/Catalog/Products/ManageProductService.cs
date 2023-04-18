@@ -116,24 +116,27 @@ namespace ShopWebApplication.Catalog.Products
         public async Task<List<Product>> GetAll()
         {
             var product = await data.Products.ToListAsync();
+
             return product;
         }
 
-        public async Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
+        public async Task<APIResult<PageResult<ProductViewModel>>> GetAllPaging(GetManageProductPagingRequest request)
         {
             // select and join
             var query = from p in data.Products
-                        join pt in data.ProductTranslations on p.Id equals pt.ProductId
+                            //join pt in data.ProductTranslations on p.Id equals pt.ProductId
                         join pic in data.ProductCategory on p.Id equals pic.ProductId
                         join c in data.Categories on pic.CategoryId equals c.Id
-                        select new { p, pt, pic };
+                        where request.CategoryId.Contains(pic.CategoryId)
+                        select new { p, pic };
 
             // filter
             if (!string.IsNullOrEmpty(request.Key))
             {
-                query = query.Where(x => x.pt.Name.Contains(request.Key));
+                query = query.Where(x => x.p.ProductName.Contains(request.Key));
             }
-            if (request.CategoryId.Count > 0)
+
+            if (request.CategoryId.Count > 0 && request.CategoryId != null)
                 query = query.Where(x => request.CategoryId.Contains(x.pic.CategoryId));
             // paging
             var totalRow = await query.CountAsync();
@@ -153,7 +156,11 @@ namespace ShopWebApplication.Catalog.Products
                 TotalRecord = totalRow,
                 Item = resurl
             };
-            return pageRecord;
+            var final = new APISuccessResult<PageResult<ProductViewModel>>()
+            {
+                ObjResult = pageRecord,
+            };
+            return final;
         }
 
         public async Task<ProductViewModel> GetById(int productId, int languageID)
@@ -258,17 +265,9 @@ namespace ShopWebApplication.Catalog.Products
             return await data.SaveChangesAsync();
         }
 
-        public async Task<RoleViewModel> roleViewModel(Guid id)
+        public Task<RoleViewModel> roleViewModel(Guid id)
         {
-            var user = await data.userRoles.Where(x => x.UserId == id).SingleOrDefaultAsync();
-            var role = await data.Roles.Where(x => x.Id == user.RoleId).SingleOrDefaultAsync();
-            var userView = new RoleViewModel()
-            {
-                Id = id,
-                Name = role.Name,
-                Description = role.Description
-            };
-            return userView;
+            throw new NotImplementedException();
         }
 
         public async Task<int> Update(ProductEditRequest request)

@@ -28,7 +28,7 @@ namespace ShopWebApplication.Catalog.Products
         //PageViewModel 1 class tra ve dang list theo du lieu truyen vao <>;
         // dua tat ca tham so vao 1 class, tuy nhien co class ko can key
 
-        Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
+        Task<APIResult<PageResult<ProductViewModel>>> GetAllPaging(GetManageProductPagingRequest request);
 
         Task UpdateViewCount(int ProductId);
 

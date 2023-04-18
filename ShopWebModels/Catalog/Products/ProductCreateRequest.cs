@@ -15,15 +15,13 @@ namespace ShopWebModels.Catalog.Products
         public int OriginalPrice { get; set; }
 
         public int Stock { get; set; }
-      
+
         public string Description { get; set; }
         public string Details { get; set; }
-        public IFormFile ThumbnaiImage { get; set; }
+
         public string CaptionImage { get; set; }
         public string SeoAlias { get; set; }
         public int langId { get; set; }
-      
-
-
+        public IFormFile ThumbnaiImage { get; set; }
     }
 }
