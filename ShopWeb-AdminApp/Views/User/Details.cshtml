@@ -1,0 +1,97 @@
+﻿@using ShopWebModels.Catalog.User
+@model UserViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Welcome @Model.FullName.</h1>
+
+<div>
+    <a asp-action="Index">Back to list</a>
+</div>
+<main>
+    <form asp-controller="User">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Information of @Model.FullName
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                        <tr>
+
+                            <th>Full Name</th>
+                            <th>Birthday</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Last login</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+
+                            <th>Full Name</th>
+                            <th>Birthday</th>
+                            <th>Phone Number</th>
+                            <th>Email</th>
+                            <th>Last login</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @if (Model != null)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.FullName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.DOB)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.UserPhone)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.Email)
+                                </td>
+                                <td>
+                                    <p>Last Login</p>
+                                </td>
+                            </tr>
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>
+                                    null
+                                </td>
+                                <td>
+                                    null
+                                </td>
+                                <td>
+                                    null
+                                </td>
+                                <td>
+                                    null
+                                </td>
+                                <td>
+                                    null
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div style="padding: 5px; border-radius: 5px">
+                    <a asp-controller="user" asp-action="EditInforUser" asp-route-id="@Model.id" value="Update" class="btn btn-success">Update</a>
+                    <button asp-controller="user" asp-action="Delete" asp-route-id="@Model.id" value="Delete" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>

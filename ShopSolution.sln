@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32901.82
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopWebApp", "ShopWebApp\ShopWebApp.csproj", "{49F3EA3F-F38C-4DAE-ACB8-B28F701FA168}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebApp", "ShopWebApp\ShopWebApp.csproj", "{49F3EA3F-F38C-4DAE-ACB8-B28F701FA168}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopWebData", "ShopWebData\ShopWebData.csproj", "{46D218FC-01DA-4EBE-810D-E7720CF80317}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebData", "ShopWebData\ShopWebData.csproj", "{46D218FC-01DA-4EBE-810D-E7720CF80317}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopWebApplication", "ShopWebApplication\ShopWebApplication.csproj", "{587B11D7-A664-44F3-A347-BE952BE3B8AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebApplication", "ShopWebApplication\ShopWebApplication.csproj", "{587B11D7-A664-44F3-A347-BE952BE3B8AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopWebException", "ShopWebException\ShopWebException.csproj", "{8F4F7717-5036-42DF-813A-1D5757EC62A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebException", "ShopWebException\ShopWebException.csproj", "{8F4F7717-5036-42DF-813A-1D5757EC62A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopWebModels", "ShopWebModels\ShopWebModels.csproj", "{912085B6-3BB5-4D40-BF79-EAA2F637E1B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebModels", "ShopWebModels\ShopWebModels.csproj", "{912085B6-3BB5-4D40-BF79-EAA2F637E1B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopWebAPI", "ShopWebAPI\ShopWebAPI.csproj", "{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWebAPI", "ShopWebAPI\ShopWebAPI.csproj", "{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopWeb-AdminApp", "ShopWeb-AdminApp\ShopWeb-AdminApp.csproj", "{3F009053-FF7A-4019-9678-803592597D69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDB29DDE-23A2-4BDA-9B43-A37CC52E9D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F009053-FF7A-4019-9678-803592597D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F009053-FF7A-4019-9678-803592597D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F009053-FF7A-4019-9678-803592597D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F009053-FF7A-4019-9678-803592597D69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

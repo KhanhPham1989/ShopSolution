@@ -1,0 +1,147 @@
+﻿@using ShopWebModels.Catalog.User
+@using ShopWebModels.Common;
+
+@model PageResult<UserViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">User List</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/">Trang chu</a></li>
+        <li class="breadcrumb-item active">Danh sach nguoi dung</li>
+    </ol>
+</div>
+@{
+    var thongbao = TempData["thongbao"] as string;
+    var message = @ViewBag.message as string;
+}
+
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('#msg').fadeOut('slow');
+        }, 4000);
+    </script>
+}
+@if (!string.IsNullOrEmpty(message))
+{
+    <div id="msg" class="alert alert-success" role="alert">
+        @message
+    </div>
+}
+@if (thongbao != null)
+{
+    <div id="msg">
+        <partial name="_Alert" model="@thongbao" />
+    </div>
+}
+
+<div class="card mb-12">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-xl-12">
+                <a class="btn btn-success" asp-action="Register" asp-controller="User">Tao moi</a>
+            </div>
+            <div class="col-md-6 col-xl-12">
+                <form asp-action="Index" method="get">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" name="Keyword" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary">Tim</button>
+                            <button type="submit" onclick="window.location.href='/User/Index'" class="btn btn-danger">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            DataTable Example
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Full Name</th>
+                        <th>Birthday</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>Last login</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>STT</th>
+                        <th>Full Name</th>
+                        <th>Birthday</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>Last login</th>
+                    </tr>
+                </tfoot>
+
+                <tbody>
+                    @if (Model.Item.Count > 0 || Model.Item != null)
+                    {
+                        int stt = 1;
+                        @foreach (var item in Model.Item)
+                        {
+
+                            <tr>
+                                <td>
+                                    @(stt++)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FullName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DOB)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserPhone)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+
+                                <td>
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <a asp-action="EditInforUser" asp-controller="User" asp-route-id="@item.id" class="btn btn-danger">Update</a>
+                                            <a asp-action="Details" asp-controller="User" asp-route-id="@item.id" class="btn btn-danger">Details</a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <a asp-action="Delete" asp-controller="User" asp-route-id="@item.id" class="btn btn-danger">Delete</a>
+                                            <a asp-action="RoleAssign" asp-controller="User" asp-route-id="@item.id" class="btn btn-danger">Role Assign</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("No information");
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>

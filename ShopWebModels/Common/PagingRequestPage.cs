@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShopWebModels.Common
 {
-    public class PagingRequestPage
+    public class PagingRequestPage : GetTokenRequest
     {
         public int PageSize { get; set; }
         public int PageIndex { get; set; }

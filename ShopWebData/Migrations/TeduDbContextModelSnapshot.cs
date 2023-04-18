@@ -172,6 +172,9 @@ namespace ShopWebData.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DOB")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -234,13 +237,14 @@ namespace ShopWebData.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2fbdb271-1eae-43b9-b935-0e73a1ea8e46"),
+                            Id = new Guid("9c1d5dd1-2d8d-4e2c-af9d-7e4f0f699e80"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0b81c4a1-fed5-49c8-9612-564e82d7db26",
+                            ConcurrencyStamp = "4c202d2f-5e18-411c-ac94-e4d7ad611e47",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc0@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 0",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(211),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(5750),
                             LockoutEnabled = false,
                             PasswordHash = "011111",
                             PhoneNumber = "0123456780",
@@ -250,13 +254,14 @@ namespace ShopWebData.Migrations
                         },
                         new
                         {
-                            Id = new Guid("68c31387-f4ab-4021-be68-1ea1023a5705"),
+                            Id = new Guid("242a0b4a-8c81-48c5-be3a-8a42eb1e0c21"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "63ae5b24-3fad-4504-a687-8bfbe93d5a28",
+                            ConcurrencyStamp = "0aa9d098-19cb-4985-a522-34f0cf2272a5",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc1@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 1",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(749),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(6652),
                             LockoutEnabled = false,
                             PasswordHash = "111111",
                             PhoneNumber = "0123456781",
@@ -266,13 +271,14 @@ namespace ShopWebData.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c60cdd95-f9f2-40bf-b169-9f8b6925deb6"),
+                            Id = new Guid("f2a04e65-85bf-421f-8d1a-dd70064497fa"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2a743c52-f48b-48df-9fd2-b6142321934b",
+                            ConcurrencyStamp = "4c6b748e-811d-4d8f-a703-8797241c1df9",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc2@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 2",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(845),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(6737),
                             LockoutEnabled = false,
                             PasswordHash = "211111",
                             PhoneNumber = "0123456782",
@@ -282,13 +288,14 @@ namespace ShopWebData.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f90ea124-f8f8-4550-8586-aa12372d990e"),
+                            Id = new Guid("8025e7ad-d383-4be0-9162-0c307af19fb3"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b62fb182-6dbb-47b8-85fb-8ea8fb59b3c4",
+                            ConcurrencyStamp = "7be8eb21-1033-427e-8542-d44953a766e3",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc3@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 3",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(874),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(6865),
                             LockoutEnabled = false,
                             PasswordHash = "311111",
                             PhoneNumber = "0123456783",
@@ -298,13 +305,14 @@ namespace ShopWebData.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1c09930c-34f2-46c2-85dd-d3cad1372941"),
+                            Id = new Guid("386866e3-7f32-4a57-9bfc-3a26c55e3cdc"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d9184807-c222-45d5-a174-db0c7be57454",
+                            ConcurrencyStamp = "499f2920-12b5-40d1-a649-6fc4abe4a857",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc4@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 4",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(907),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(6951),
                             LockoutEnabled = false,
                             PasswordHash = "411111",
                             PhoneNumber = "0123456784",
@@ -314,13 +322,14 @@ namespace ShopWebData.Migrations
                         },
                         new
                         {
-                            Id = new Guid("467689f2-c5b9-4c10-8ef4-a27a267bd48e"),
+                            Id = new Guid("7b958007-9673-4e2e-b296-5680bd9e9e34"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "73e2b419-9ab0-4b29-92e5-cee7a6bbadd9",
+                            ConcurrencyStamp = "a11edf2e-de0c-4347-a647-10f1014c30ec",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc5@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 5",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(935),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(7086),
                             LockoutEnabled = false,
                             PasswordHash = "511111",
                             PhoneNumber = "0123456785",
@@ -330,13 +339,14 @@ namespace ShopWebData.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1606a152-b05a-4af9-bee2-0b207c5df7b2"),
+                            Id = new Guid("c7f5e3d2-da96-4682-a506-d7a487b4e912"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5016a33e-c020-4830-b68a-50e9672088f9",
+                            ConcurrencyStamp = "926f3ac3-1148-4dff-9d34-9657ab04fb56",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc6@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 6",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(963),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(7174),
                             LockoutEnabled = false,
                             PasswordHash = "611111",
                             PhoneNumber = "0123456786",
@@ -346,13 +356,14 @@ namespace ShopWebData.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c90e8924-a844-4aff-a6c9-47b505e578b9"),
+                            Id = new Guid("aa62aede-b2e2-4c56-8119-e1e713752dc9"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e920f7aa-5b8b-4cfa-9451-e59a932d97c6",
+                            ConcurrencyStamp = "3e23254a-570b-4c6d-bd02-589357348b71",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc7@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 7",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(989),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(7233),
                             LockoutEnabled = false,
                             PasswordHash = "711111",
                             PhoneNumber = "0123456787",
@@ -362,13 +373,14 @@ namespace ShopWebData.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6306799c-b4de-4177-b17e-7bb0df53a29a"),
+                            Id = new Guid("2a62a989-5d4f-4654-9d9e-399a31e04b64"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3ee0309b-7f95-4036-aebd-f66ffd04cc95",
+                            ConcurrencyStamp = "cafb3632-d4f6-453f-a738-4cc4eac922cc",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc8@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 8",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(1014),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(7285),
                             LockoutEnabled = false,
                             PasswordHash = "811111",
                             PhoneNumber = "0123456788",
@@ -378,13 +390,14 @@ namespace ShopWebData.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a9605d25-e9fc-4501-8cd2-7083b38564e0"),
+                            Id = new Guid("bf74d45c-6c03-4f58-86d6-4cd4b92cb2a1"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6c2f9e23-aab9-43ea-a710-f32df10e4b9a",
+                            ConcurrencyStamp = "4987ffdf-2464-45d3-ade5-666029911564",
+                            DOB = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "abc9@gmail.com",
                             EmailConfirmed = false,
                             FullName = "Nguyen Van 9",
-                            LastLoginDate = new DateTime(2023, 4, 2, 13, 28, 54, 462, DateTimeKind.Local).AddTicks(1040),
+                            LastLoginDate = new DateTime(2023, 4, 14, 13, 43, 47, 579, DateTimeKind.Local).AddTicks(7336),
                             LockoutEnabled = false,
                             PasswordHash = "911111",
                             PhoneNumber = "0123456789",
@@ -644,7 +657,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 1 cua SamSung",
                             OriginalPrice = 2001m,
                             Price = 1001m,
@@ -656,7 +669,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 2,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 2 cua SamSung",
                             OriginalPrice = 2002m,
                             Price = 1002m,
@@ -668,7 +681,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 3,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 3 cua SamSung",
                             OriginalPrice = 2003m,
                             Price = 1003m,
@@ -680,7 +693,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 4,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 4 cua SamSung",
                             OriginalPrice = 2004m,
                             Price = 1004m,
@@ -692,7 +705,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 5,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 5 cua SamSung",
                             OriginalPrice = 2005m,
                             Price = 1005m,
@@ -704,7 +717,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 6,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 6 cua SamSung",
                             OriginalPrice = 2006m,
                             Price = 1006m,
@@ -716,7 +729,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 7,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 7 cua SamSung",
                             OriginalPrice = 2007m,
                             Price = 1007m,
@@ -728,7 +741,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 8,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 8 cua SamSung",
                             OriginalPrice = 2008m,
                             Price = 1008m,
@@ -740,7 +753,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 9,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 9 cua SamSung",
                             OriginalPrice = 2009m,
                             Price = 1009m,
@@ -752,7 +765,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 10,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 10 cua SamSung",
                             OriginalPrice = 2010m,
                             Price = 1010m,
@@ -764,7 +777,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 11,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 11 cua SamSung",
                             OriginalPrice = 2011m,
                             Price = 1011m,
@@ -776,7 +789,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 12,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 12 cua SamSung",
                             OriginalPrice = 2012m,
                             Price = 1012m,
@@ -788,7 +801,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 13,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 13 cua SamSung",
                             OriginalPrice = 2013m,
                             Price = 1013m,
@@ -800,7 +813,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 14,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 14 cua SamSung",
                             OriginalPrice = 2014m,
                             Price = 1014m,
@@ -812,7 +825,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 15,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 15 cua SamSung",
                             OriginalPrice = 2015m,
                             Price = 1015m,
@@ -824,7 +837,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 16,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 16 cua SamSung",
                             OriginalPrice = 2016m,
                             Price = 1016m,
@@ -836,7 +849,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 17,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 17 cua SamSung",
                             OriginalPrice = 2017m,
                             Price = 1017m,
@@ -848,7 +861,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 18,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 18 cua SamSung",
                             OriginalPrice = 2018m,
                             Price = 1018m,
@@ -860,7 +873,7 @@ namespace ShopWebData.Migrations
                         new
                         {
                             Id = 19,
-                            DateCreated = new DateTime(2023, 4, 2, 0, 0, 0, 0, DateTimeKind.Local),
+                            DateCreated = new DateTime(2023, 4, 14, 0, 0, 0, 0, DateTimeKind.Local),
                             Description = "San pham thu 19 cua SamSung",
                             OriginalPrice = 2019m,
                             Price = 1019m,
@@ -1106,6 +1119,23 @@ namespace ShopWebData.Migrations
                     b.ToTable("Transaction");
                 });
 
+            modelBuilder.Entity("ShopWebData.Entities.UserRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>");
+
+                    b.Property<Guid?>("appUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("roleIdentityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("appUserId");
+
+                    b.HasIndex("roleIdentityId");
+
+                    b.ToTable("UserRole");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("ShopWebData.Entities.RoleIdentity", null)
@@ -1309,6 +1339,27 @@ namespace ShopWebData.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("ShopWebData.Entities.UserRole", b =>
+                {
+                    b.HasOne("ShopWebData.Entities.AppUser", "appUser")
+                        .WithMany("userRoles")
+                        .HasForeignKey("appUserId");
+
+                    b.HasOne("ShopWebData.Entities.RoleIdentity", "roleIdentity")
+                        .WithMany("userRole")
+                        .HasForeignKey("roleIdentityId");
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", null)
+                        .WithOne()
+                        .HasForeignKey("ShopWebData.Entities.UserRole", "UserId", "RoleId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("appUser");
+
+                    b.Navigation("roleIdentity");
+                });
+
             modelBuilder.Entity("ShopWebData.Entities.AppUser", b =>
                 {
                     b.Navigation("Carts");
@@ -1318,6 +1369,8 @@ namespace ShopWebData.Migrations
                     b.Navigation("SystemActivities");
 
                     b.Navigation("Transactions");
+
+                    b.Navigation("userRoles");
                 });
 
             modelBuilder.Entity("ShopWebData.Entities.Category", b =>
@@ -1355,6 +1408,11 @@ namespace ShopWebData.Migrations
                     b.Navigation("ProductTranslations");
 
                     b.Navigation("Promotions");
+                });
+
+            modelBuilder.Entity("ShopWebData.Entities.RoleIdentity", b =>
+                {
+                    b.Navigation("userRole");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,14 @@
+﻿@{
+    var smg = TempData["Message"] as string;
+}
+
+@if (!string.IsNullOrEmpty(smg))
+{
+    var stastusMess = smg.StartsWith("Error") ? "danger" : "success";
+    <div class="alert alert-@stastusMess alert-dismissible" role="alert">
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @smg
+    </div>
+}
