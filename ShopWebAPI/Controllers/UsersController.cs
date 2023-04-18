@@ -30,7 +30,7 @@ namespace ShopWebAPI.Controllers
             if (string.IsNullOrEmpty(result))
                 return BadRequest("UserName or Password is incorrect");
 
-            //HttpContext.Session.GetString(result); // luu vao session
+            //HttpContext.Session.SetString("Token", result); // luu vao session
             return Ok(result);
         }
 

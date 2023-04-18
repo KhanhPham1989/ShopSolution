@@ -10,7 +10,7 @@ namespace ShopWeb_AdminApp.Service.Product
 {
     public interface IProductClientInterface
     {
-        Task<APIResult<int>> Create(ProductCreateRequest request);
+        Task<APIResult<bool>> Create(ProductCreateRequest request);
 
         Task<APIResult<int>> Update(ProductEditRequest request);
 
@@ -18,7 +18,7 @@ namespace ShopWeb_AdminApp.Service.Product
 
         Task<APIResult<ProductViewModel>> GetById(int productId, int languageID);
 
-        Task<APIResult<List<IProductClient>>> GetAll();
+        Task<APIResult<List<ProductViewModel>>> GetAll();
 
         //Task<List<ProductViewModel>> GetAllPaging(string key, int pageIndex, int pageSize);
         //PageViewModel 1 class tra ve dang list theo du lieu truyen vao <>;

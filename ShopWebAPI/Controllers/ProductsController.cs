@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShopWebApplication.Catalog.Products;
@@ -13,7 +14,6 @@ namespace ShopWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IManageProductService _manager;
@@ -26,6 +26,7 @@ namespace ShopWebAPI.Controllers
         }
 
         [HttpGet("GetAllProduct")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllProduct()
         {
             var data = await _manager.GetAll();
@@ -34,6 +35,7 @@ namespace ShopWebAPI.Controllers
 
         // http://locolhost:port/controller
         [HttpGet("PublicGet")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             var data = await _public.GetAll();
@@ -50,9 +52,21 @@ namespace ShopWebAPI.Controllers
             return Ok(data);
         }
 
+        [HttpGet("GetAllPaging")] // http://locolhost:port/Products?PageIndex =1&pageSize=5&CategoryId = ?
+        public async Task<IActionResult> GetAllPaging([FromQuery] GetManageProductPagingRequest request)
+        {
+            var data = await _manager.GetAllPaging(request);
+            if (data.Success)
+                return Ok(data);
+
+            if (data.ObjResult == null)
+                return BadRequest(data.Message);
+            return BadRequest(data.Message);
+        }
+
         // http://locolhost:port/controller/1
         [HttpGet("GetById/{productId}/{langugeId}")]
-        public async Task<IActionResult> GetManager_ProductByID([FromForm] int productId, int langugeId)
+        public async Task<IActionResult> GetManager_ProductByID([FromQuery] int productId, int langugeId)
         {
             var data = await _manager.GetById(productId, langugeId);
             if (data == null) return BadRequest("ID not exits");
@@ -60,14 +74,15 @@ namespace ShopWebAPI.Controllers
             return Created(nameof(GetManager_ProductByID), data.Id);
         }
 
-        [HttpPost]
+        [HttpPost("CreateProduct")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateProduct([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var productID = await _manager.Create(request);
             if (productID == 0)
-                return BadRequest();
+                return BadRequest("khong tao san pham duoc");
 
             var product = await _manager.GetById(productID, request.langId);
             //   return Created(nameof(GetManager_ProductByID), product);

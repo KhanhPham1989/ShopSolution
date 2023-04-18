@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ShopWebException\ShopWebException.csproj" />
     <ProjectReference Include="..\ShopWebModels\ShopWebModels.csproj" />
   </ItemGroup>
 
