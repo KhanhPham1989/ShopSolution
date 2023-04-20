@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ShopWebApp.Controllers
 {
+    [Area("Shop/Controller")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
