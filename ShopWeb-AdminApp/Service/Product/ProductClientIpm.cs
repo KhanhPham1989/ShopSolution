@@ -94,8 +94,7 @@ namespace ShopWeb_AdminApp.Service.Product
 
         public async Task<APIResult<PageResult<ProductViewModel>>> GetAllPaging(GetManageProductPagingRequest request)
         {
-            string url = $"/api/Products/GetAllPaging?" +
-                $"Key={request.Key}&PageSize={request.PageSize}&PageIndex={request.PageIndex}&CategoryId={1}";
+            string url = $"/api/Products/GetAllPaging?Key={request.Key}&Categori={request.Categori}&PageSize={request.PageSize}&PageIndex={request.PageIndex}";
             // var data = await base.GetAsync<APIResult<PageResult<ProductViewModel>>>(url);
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClient.CreateClient();

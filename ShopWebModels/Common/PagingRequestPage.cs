@@ -10,5 +10,7 @@ namespace ShopWebModels.Common
     {
         public int PageSize { get; set; }
         public int PageIndex { get; set; }
+
+        //public Func<int?, string> generateUrl { get; set; }
     }
 }

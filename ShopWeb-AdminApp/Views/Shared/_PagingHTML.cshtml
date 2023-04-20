@@ -1,0 +1,119 @@
+﻿@using ShopWebModels.Common
+@model PagingRequestPage
+
+@{
+    int currentPage = Model.PageIndex;
+    int countPage = Model.PageSize;
+
+    if (currentPage > countPage)
+        currentPage = countPage;
+
+    if (currentPage < 0)
+        return;
+
+    int? nextPage = null;
+    int? previewPage = null;
+
+    if (currentPage < countPage)
+        nextPage = currentPage + 1;
+
+    if (currentPage > 1)
+        previewPage = currentPage - 1;
+
+    List<int> pagesRange = new List<int>();
+
+    int delta = 5;
+    int remain = delta * 2;
+
+    pagesRange.Add(currentPage);
+
+    for (int i = 1; i <= delta; i++)
+    {
+        if (currentPage + i <= countPage)
+        {
+            pagesRange.Add(currentPage + i);
+            remain--;
+        }
+        if (currentPage - i > 1)
+        {
+            pagesRange.Add(currentPage - i);
+            remain--;
+        }
+
+    }
+
+    if (remain > 0)
+    {
+        if (pagesRange[0] == 1)
+        {
+            for (int i = 1; i <= remain; i++)
+            {
+                if (pagesRange.Last() + 1 <= countPage)
+                {
+                    pagesRange.Add(pagesRange.Last() + 1);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 1; i <= remain; i++)
+            {
+                if (pagesRange.First() - 1 > 1)
+                {
+                    pagesRange.Insert(0, pagesRange.First() - 1);
+                }
+            }
+        }
+    }
+}
+
+@* PHÁT SINH HTML*@
+
+<ul class="pagination">
+    <!-- Previous page link -->
+    @if (previewPage != null)
+    {
+        <li class="page-item">
+            <a class="page-link">Trang trước</a>
+        </li>
+    }
+    else
+    {
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trang trước</a>
+        </li>
+    }
+
+    <!-- Numbered page links -->
+    @foreach (var pageitem in pagesRange)
+    {
+        if (pageitem != currentPage)
+        {
+            <li class="page-item">
+                <a class="page-link">
+                    @pageitem
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">@pageitem <span class="sr-only">(current)</span></a>
+            </li>
+        }
+    }
+
+    <!-- Next page link -->
+    @if (nextPage != null)
+    {
+        <li class="page-item">
+            <a class="page-link">Trang sau</a>
+        </li>
+    }
+    else
+    {
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trang sau</a>
+        </li>
+    }
+</ul>

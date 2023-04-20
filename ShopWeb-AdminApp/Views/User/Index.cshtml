@@ -96,7 +96,7 @@
                 </tfoot>
 
                 <tbody>
-                    @if (Model.Item.Count > 0 || Model.Item != null)
+                    @if (Model.Item.Count > 0 || Model.Item == null)
                     {
                         int stt = 1;
                         @foreach (var item in Model.Item)

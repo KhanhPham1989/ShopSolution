@@ -15,10 +15,12 @@ namespace ShopWebData.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        public string CateName { get; set; }
         public int SortOrder { get; set; }
         public bool IsShowOnHome { get; set; }
         public int? ParentId { get; set; }
-        
+
         public Status Statuss { get; set; }
         //public string CategoryName { get; set; }
 

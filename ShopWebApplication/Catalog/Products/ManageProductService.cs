@@ -125,10 +125,14 @@ namespace ShopWebApplication.Catalog.Products
             // select and join
             var query = from p in data.Products
                             //join pt in data.ProductTranslations on p.Id equals pt.ProductId
-                        join pic in data.ProductCategory on p.Id equals pic.ProductId
-                        join c in data.Categories on pic.CategoryId equals c.Id
-                        where request.CategoryId.Contains(pic.CategoryId)
-                        select new { p, pic };
+                        join pic in data.ProductCategory on p.Id equals pic.ProductId into ppic
+                        from pic in ppic.DefaultIfEmpty()
+                        join c in data.Categories on pic.CategoryId equals c.Id into pc
+                        from c in pc.DefaultIfEmpty()
+                        where request.Categori.Equals(pic.CategoryId) /*&& pt.LangueId == request.langugeId*/
+                        select new { p, pic, c };
+            // join cac banng theo ID lien ket, tra ve ket qua theo bang ben trai bat chap gia tri bang ben phai la null
+            // ket qua tra ve theo bang ben trai va value la null
 
             // filter
             if (!string.IsNullOrEmpty(request.Key))
@@ -136,9 +140,13 @@ namespace ShopWebApplication.Catalog.Products
                 query = query.Where(x => x.p.ProductName.Contains(request.Key));
             }
 
-            if (request.CategoryId.Count > 0 && request.CategoryId != null)
-                query = query.Where(x => request.CategoryId.Contains(x.pic.CategoryId));
+            //if (request.CategoryId.Count > 0 && request.CategoryId != null)
+            //    query = query.Where(x => request.CategoryId.Contains(x.pic.CategoryId));
             // paging
+
+            if (request.Categori != null && request.Categori != 0)
+                query = query.Where(x => request.Categori.Equals(x.pic.CategoryId));
+
             var totalRow = await query.CountAsync();
             var resurl = await query.Skip((request.PageIndex - 1) * request.PageSize).Take(request.PageSize)
                 .Select(x => new ProductViewModel()
@@ -147,14 +155,17 @@ namespace ShopWebApplication.Catalog.Products
                     ProductName = x.p.ProductName,
                     Price = x.p.Price,
                     OriginalPrice = x.p.OriginalPrice,
-                    Description = x.p.Description
+                    Description = x.p.Description,
+                    CategoriId = x.c.Id
                 }).ToListAsync();
 
             // select and projection
             var pageRecord = new PageResult<ProductViewModel>()
             {
-                TotalRecord = totalRow,
-                Item = resurl
+                TotalRecords = totalRow,
+                Item = resurl,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
             };
             var final = new APISuccessResult<PageResult<ProductViewModel>>()
             {

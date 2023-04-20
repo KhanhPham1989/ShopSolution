@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ShopWeb_AdminApp.Service.Categories;
 using ShopWeb_AdminApp.Service.Product;
 using ShopWeb_AdminApp.Service.RoleClient;
 using ShopWeb_AdminApp.Service.User;
@@ -35,6 +36,7 @@ namespace ShopWeb_AdminApp
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleClientService, IRoleClientServiceImp>();
             services.AddTransient<IProductClientInterface, ProductClientIpm>();
+            services.AddTransient<ICategoriesService, CategoriServiceImp>();
 
             services.AddControllersWithViews().AddFluentValidation(fw =>
             {
