@@ -1,0 +1,75 @@
+﻿@model ShopWebModels.Common.PageResultBase
+@{
+    var urlTemplate = Url.Action() + "?PageIndex={0}";
+    var request = ViewContext.HttpContext.Request;
+    var pageCount = Model.PageCount;
+    var pageIndex = Model.PageIndex;
+    var pageSize = Model.PageSize;
+
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "PageIndex")
+            continue;
+
+        if (request.Query[key].Count > 1)
+        {
+            foreach (var item in (string[])request.Query[key])
+            {
+                urlTemplate += "&" + key + "=" + item;
+            }
+        }
+        else
+        {
+            urlTemplate += "&" + key + "=" + request.Query[key];
+        }
+    }
+
+    var startIndex = Math.Max(pageIndex - 5, 1);
+    var finishIndex = Math.Min(pageIndex + 5, pageCount);
+
+    if (pageCount > 1)
+    {
+        <ul class="pagination" id="pagination">
+            @if (pageIndex != startIndex)
+            {
+                <li class="page-item">
+                    <a class="page-link" title="@pageCount.ToString()" href="@urlTemplate.Replace("{0}",pageCount.ToString())">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="@urlTemplate.Replace("{0}",(pageIndex-1).ToString())">End</a>
+                </li>
+
+            }
+            @for (int i = startIndex; i <= finishIndex; i++)
+            {
+                if (i == pageIndex)
+                {
+                    <li class="page-item active">
+                        <a class="page-link" href="#">
+                         @i
+                        </a>
+                    </li>
+
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@urlTemplate.Replace("{0}",i.ToString())" title="Trang @i.ToString()">@i</a>
+                    </li>
+
+                }
+
+            }
+            @if (pageIndex != finishIndex)
+            {
+
+                <li class="page-item">
+                    <a class="page-link" title="@pageCount.ToString()" href="@urlTemplate.Replace("{0}",(pageIndex+1).ToString())">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="@urlTemplate.Replace("{0}",pageCount.ToString())">End</a>
+                </li>
+            }
+        </ul>
+    }
+}

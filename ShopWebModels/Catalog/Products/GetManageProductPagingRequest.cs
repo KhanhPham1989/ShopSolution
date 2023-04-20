@@ -11,6 +11,8 @@ namespace ShopWebModels.Catalog.Products
     {
         public string Key { get; set; }
 
-        public List<int> CategoryId { get; set; }
+        public int langugeId { get; set; }
+        public int? Categori { get; set; }
+        //  public List<int> CategoryId { get; set; }
     }
 }

@@ -9,18 +9,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace ShopWebApplication.Catalog.Products
 {
     public class PublicProductService : IPublicProductService
     {
         private readonly TeduDbContext data;
+
         public PublicProductService(TeduDbContext _data)
         {
             data = _data;
         }
-
-        
 
         public async Task<List<ProductViewModel>> GetAll()
         {
@@ -45,14 +43,12 @@ namespace ShopWebApplication.Catalog.Products
                     SeoTitle = x.pt.SeoTitle,
                     ViewCount = x.p.ViewCount,
                     DateCreated = x.p.DateCreated
-                    
-                    
                 }).ToListAsync();
-                    return resurl;
+            return resurl;
         }
 
         // tra ve list cua ProductViewModel
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryById(int langId,GetPublicProductPagingRequest request) 
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryById(int langId, GetPublicProductPagingRequest request)
         {
             // select and join
             var query = from p in data.Products
@@ -84,7 +80,7 @@ namespace ShopWebApplication.Catalog.Products
             // select and projection
             var pageRecord = new PageResult<ProductViewModel>() // tao 1 class tra ve cho view 2 gia tri
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
                 Item = resurl
             };
             return pageRecord;

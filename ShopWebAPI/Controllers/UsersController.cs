@@ -86,7 +86,7 @@ namespace ShopWebAPI.Controllers
         public async Task<IActionResult> GetUserPaging([FromQuery] GetUserPagingRequest request)
         {
             var UserList = await _userService.GetUserPaging(request);
-            if (UserList.TotalRecord > 0)
+            if (UserList.TotalRecords > 0)
             {
                 return Ok(UserList);
             }

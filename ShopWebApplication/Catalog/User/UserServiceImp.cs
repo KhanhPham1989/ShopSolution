@@ -200,7 +200,7 @@ namespace ShopWebApplication.Catalog.User
                 var page = new PageResult<UserViewModel>()
                 {
                     Item = data,
-                    TotalRecord = totalnull
+                    TotalRecords = totalnull
                 };
                 return page;
             }
@@ -218,7 +218,7 @@ namespace ShopWebApplication.Catalog.User
             var pageUser = new PageResult<UserViewModel>()
             {
                 Item = resurl,
-                TotalRecord = totalUser
+                TotalRecords = totalUser
             };
             return pageUser;
         }

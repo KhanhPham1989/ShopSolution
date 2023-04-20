@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ShopWebModels.Common
 {
-    public class PageResult<T>
+    public class PageResult<T> : PageResultBase
     {
         public List<T> Item { get; set; }
-        public int TotalRecord { get; set; }
     }
 }

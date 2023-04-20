@@ -3,7 +3,11 @@
     var mess = TempData["thongbao"] as string;
 
 }
-
+<script>
+    setTimeout(function () {
+        $('#active').fadeOut('slow');
+    }, 2000);
+</script>
 @if (!string.IsNullOrEmpty(mess))
 {
     <div id="active" class="alert alert-dismissible alert-warning fade show " role="alert">
@@ -15,9 +19,3 @@
         </button>
     </div>
 }
-
-<script>
-    setTimeout(function () {
-        $('#active').fadeOut('slow');
-    }, 2000);
-</script>

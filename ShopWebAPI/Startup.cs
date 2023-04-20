@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ShopWebApplication.Catalog.Categories;
 using ShopWebApplication.Catalog.Products;
 using ShopWebApplication.Catalog.RoleCata;
 using ShopWebApplication.Catalog.User;
@@ -56,7 +57,7 @@ namespace ShopWebAPI
             services.AddTransient<IValidator<LoginRequest>, LoginValidate>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterValidate>();
             services.AddTransient<IRolesService, RolesServiceImp>();
-            // services.AddTransient<RoleManager<Role>, RoleManager<Role>>();
+            services.AddTransient<IManageCategori, ManageCategori>();
 
             services.AddControllers().AddFluentValidation(fw =>
             {

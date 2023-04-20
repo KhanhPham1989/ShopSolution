@@ -4,7 +4,17 @@
 
 @{
     ViewData["Title"] = "Danh sach san pham";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+
+    <script>
+        setTimeout(function () {
+            $('#msg').fadeOut('slow');
+        }, 4000);
+    </script>
+
 }
 
 <div class="container-fluid">
@@ -13,32 +23,19 @@
         <li class="breadcrumb-item"><a href="/">Trang chu</a></li>
         <li class="breadcrumb-item active">Danh sach san pham</li>
     </ol>
+    @if (!string.IsNullOrEmpty(@ViewBag.message))
+    {
+        <div id="msg" class="alert alert-success" role="alert">
+            @ViewBag.message
+        </div>
+    }
+    @if (@ViewBag.message != null)
+    {
+        <div id="msg">
+            <partial name="_Alert" model="@ViewBag.message" />
+        </div>
+    }
 </div>
-@{
-    var thongbao = TempData["thongbao"] as string;
-    var message = @ViewBag.message as string;
-}
-
-@section Scripts{
-    <script>
-        setTimeout(function () {
-            $('#msg').fadeOut('slow');
-        }, 4000);
-    </script>
-}
-@if (!string.IsNullOrEmpty(message))
-{
-    <div id="msg" class="alert alert-success" role="alert">
-        @message
-    </div>
-}
-@if (thongbao != null)
-{
-    <div id="msg">
-        <partial name="_Alert" model="@thongbao" />
-    </div>
-}
-
 <div class="card mb-12">
     <div class="card-header">
         <div class="row">
@@ -49,8 +46,13 @@
                 <form asp-action="Index" method="get">
 
                     <div class="row">
-                        <div class="col-md-8">
-                            <input type="text" name="Keyword" class="form-control" />
+                        <div class="col-md-4">
+                            <input type="text" value="@ViewBag.Key" name="Key" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <select name="cateId" onchange="this.form.submit()" asp-items="@ViewBag.categori">
+                                <option value="value">-----Select-----</option>
+                            </select>
                         </div>
                         <div class="col-md-3">
                             <button type="submit" class="btn btn-primary">Tim</button>
@@ -64,96 +66,64 @@
 </div>
 
 <main>
-
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             DataTable Example
         </div>
-
         <div class="card-body">
-            <table id="datatablesSimple">
-                <thead class="col mb-10">
-                    <tr>
-                        <th>STT</th>
-                        <th>Product Name</th>
-                        <th>Price</th>
-                        <th>OriginalPrice</th>
-                        <th>Stock</th>
-                        <th>SeoAlias</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>STT</th>
-                        <th>Product Name</th>
-                        <th>Price</th>
-                        <th>OriginalPrice</th>
-                        <th>Stock</th>
-                        <th>SeoAlias</th>
-                        <th>Description</th>
-                    </tr>
-                </tfoot>
+            <div class="table-responsive">
+                <table id="datatablesSimple">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
 
-                <tbody>
-                    @if (Model.Item.Count > 0)
-                    {
-                        int stt = 1;
-                        @foreach (var item in Model.Item)
+                            <th>Stock</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Item.Count > 0 || Model.Item.Count == 0)
                         {
+                            int stt = 1;
+                            @foreach (var item in Model.Item)
+                            {
+                                <tr>
+                                    <td>
+                                        @(stt++)
+                                    </td>
+                                    <td hidden>
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ProductName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Price)
+                                    </td>
 
-                            <tr>
-                                <td>
-                                    @(stt++)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ProductName)
-                                    @Html.DisplayFor(modelItem => item.ViewCount)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Price)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.OriginalPrice)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Stock)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SeoAlias)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Description)
-                                </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Stock)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
 
-                                <td>
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            <div class="col col-sm-5">
-                                                <a asp-action="EditInforUser" asp-controller="User" asp-route-id="@item.Id" class="btn btn-danger">Update</a>
-                                            </div>
-                                            <div class="col col-sm-5">
-                                                <a asp-action="Details" asp-controller="User" asp-route-id="@item.Id" class="btn btn-danger">Details</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            <a asp-action="Delete" asp-controller="User" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                                            <a asp-action="RoleAssign" asp-controller="User" asp-route-id="@item.Id" class="btn btn-danger">Role Assign</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                        <a class="btn btn-success" asp-action="CategoriAssign" asp-route-id="@item.Id">
+                                            CategoriAssign
+                                        </a>
+                                        @*<a asp-action="RoleAssign" asp-controller="User" asp-route-id="@item.Id" class="btn btn-danger">Role Assign</a>*@
+                                    </td>
+                                </tr>
+                            }
                         }
-                    }
-                    else
-                    {
-                        throw new Exception("No information");
-                    }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
+        @await Component.InvokeAsync("Pager", Model)
     </div>
 </main>

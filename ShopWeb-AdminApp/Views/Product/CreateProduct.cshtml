@@ -5,7 +5,22 @@
     ViewData["Title"] = "Tao moi san pham";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section Scriptss{
+    <script src="https://cdn.ckeditor.com/ckeditor5/[version.number]/[distribution]/ckeditor.js"></script>
+    <script src="ckeditor.js"></script>
+    <script>
+        
+        ClassicEditor.create(document.querySelector('#textarea'), {
 
+            })
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(err => {
+                console.error(err.stack);
+            });
+    </script>
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,7 +79,7 @@
                                             </div>
                                             <div class="col-md-9 form-group">
                                                 <label asp-for="Description" class="control-label">Description</label>
-                                                <textarea asp-for="Description" class="form-control"></textarea>
+                                                <textarea id="textarea" asp-for="Description" class="form-control"></textarea>
                                                 <span asp-validation-for="Description" class="text-danger"></span>
                                             </div>
                                             <div class="col-md-9 form-group">
