@@ -12,7 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopWeb_AdminApp.Service.User
+namespace LibraryAPIApp.Service.User
 {
     public class UserService : IUserService //adminapp
     {

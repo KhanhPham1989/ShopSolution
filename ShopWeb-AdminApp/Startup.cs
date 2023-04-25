@@ -7,15 +7,16 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ShopWeb_AdminApp.Service.Categories;
-using ShopWeb_AdminApp.Service.Product;
-using ShopWeb_AdminApp.Service.RoleClient;
-using ShopWeb_AdminApp.Service.User;
+using LibraryAPIApp.Service.Categories;
+using LibraryAPIApp.Service.Product;
+using LibraryAPIApp.Service.RoleClient;
+using LibraryAPIApp.Service.User;
 using ShopWebModels.Catalog.User.ValadateUser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LibraryAPIApp.Service.SlideClient;
 
 namespace ShopWeb_AdminApp
 {
@@ -37,6 +38,7 @@ namespace ShopWeb_AdminApp
             services.AddTransient<IRoleClientService, IRoleClientServiceImp>();
             services.AddTransient<IProductClientInterface, ProductClientIpm>();
             services.AddTransient<ICategoriesService, CategoriServiceImp>();
+            services.AddTransient<ISlideClient, SlideClientServiceImp>();
 
             services.AddControllersWithViews().AddFluentValidation(fw =>
             {
@@ -73,7 +75,7 @@ namespace ShopWeb_AdminApp
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Home1/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -91,7 +93,7 @@ namespace ShopWeb_AdminApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home1}/{action=Index}/{id?}");
             });
         }
     }

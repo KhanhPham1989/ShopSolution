@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopWeb_AdminApp.Service.Product
+namespace LibraryAPIApp.Service.Product
 {
     public interface IProductClientInterface
     {
         Task<APIResult<bool>> Create(ProductCreateRequest request);
 
-        Task<APIResult<int>> Update(ProductEditRequest request);
+        Task<APIResult<bool>> Update(ProductEditRequest request);
 
         Task<APIResult<int>> Delete(int productId);
 

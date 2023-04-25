@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopWeb_AdminApp.Service.User //adminapp
+namespace LibraryAPIApp.Service.User //adminapp
 {
     public interface IUserService
     {

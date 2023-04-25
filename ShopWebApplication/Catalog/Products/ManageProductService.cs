@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using ShopWebException.Common;
 
 namespace ShopWebApplication.Catalog.Products
 {
@@ -53,6 +54,31 @@ namespace ShopWebApplication.Catalog.Products
 
         public async Task<int> Create(ProductCreateRequest request)
         {
+            var languegs = data.Languages;
+            var translation = new List<ProductTranslation>();
+            foreach (var langueg in languegs)
+            {
+                if (request.langId == langueg.LangueId)
+                {
+                    translation.Add(new ProductTranslation()
+                    {
+                        LangueId = request.langId,
+                        Description = request.Description,
+                        Details = request.Details,
+                        SeoAlias = request.SeoAlias
+                    });
+                }
+                else
+                {
+                    translation.Add(new ProductTranslation()
+                    {
+                        LangueId = langueg.LangueId,
+                        Description = ConnectionStringcs.Na,
+                        Details = ConnectionStringcs.Na,
+                        SeoAlias = ConnectionStringcs.Na
+                    });
+                }
+            }
             var product = new Product
             {
                 Price = request.Price,
@@ -63,17 +89,9 @@ namespace ShopWebApplication.Catalog.Products
                 SeoAlias = request.SeoAlias,
                 DateCreated = DateTime.Now,
                 Description = request.Description,
-                ProductTranslations = new List<ProductTranslation>
-                {
-                    new ProductTranslation
-                    {
-                        LangueId = request.langId,
-                        Description = request.Description,
-                        Details = request.Details,
-                        SeoAlias = request.SeoAlias
-                    }
-                }
+                ProductTranslations = translation
             };
+
             // Save Image
             // Kiem tra trong object gui toi co hinh anh hya ko
             if (request.ThumbnaiImage != null)
@@ -85,7 +103,7 @@ namespace ShopWebApplication.Catalog.Products
                         Caption = request.CaptionImage,
                         DateCreate = DateTime.Now,
                         FileSize = request.ThumbnaiImage.Length,
-                        ImagePath = await this.SaveFile(request.ThumbnaiImage),
+                        ImagePath =  await this.SaveFile(request.ThumbnaiImage),
                         IsDefault = true,
                         SortOrder = 1,
                     }
@@ -182,18 +200,51 @@ namespace ShopWebApplication.Catalog.Products
             if (product == null)
                 return null;
 
+            if (productTranslation == null)
+            {
+                var productViewModels = new ProductViewModel
+                {
+                    ProductName = product.ProductName,
+                    Price = product.Price,
+                    OriginalPrice = product.OriginalPrice,
+                    Stock = product.Stock,
+                    Description = ConnectionStringcs.Na,
+                    SeoAlias = ConnectionStringcs.Na,
+                    SeoDescription = ConnectionStringcs.Na,
+                    DateCreated = product.DateCreated,
+                    SeoTitle = ConnectionStringcs.Na,
+                    ViewCount = product.ViewCount,
+                    languageID = languageID,
+                    TranslationDetails = ConnectionStringcs.Na,
+                };
+
+                var input = new ProductTranslation()
+                {
+                    ProductId = productId,
+                    LangueId = languageID,
+                    Description = ConnectionStringcs.Na,
+                    SeoAlias = ConnectionStringcs.Na,
+                    SeoDescription = ConnectionStringcs.Na,
+                    SeoTitle = ConnectionStringcs.Na,
+                };
+                await data.ProductTranslations.AddAsync(input);
+                await data.SaveChangesAsync();
+                return productViewModels;
+            }
+
             var productViewModel = new ProductViewModel
             {
                 ProductName = product.ProductName,
                 Price = product.Price,
                 OriginalPrice = product.OriginalPrice,
                 Stock = product.Stock,
-                Description = productTranslation == null ? productTranslation.Description : null,
-                SeoAlias = productTranslation == null ? productTranslation.SeoAlias : null,
-                SeoDescription = productTranslation == null ? productTranslation.SeoDescription : null,
+                Description = productTranslation.Description,
+                SeoAlias = productTranslation.SeoAlias,
+                SeoDescription = productTranslation.SeoDescription,
                 DateCreated = product.DateCreated,
-                SeoTitle = productTranslation == null ? productTranslation.SeoTitle : null,
-                ViewCount = product.ViewCount
+                SeoTitle = productTranslation.SeoTitle,
+                ViewCount = product.ViewCount,
+                TranslationDetails = productTranslation.Details
             };
             return productViewModel;
         }
@@ -281,17 +332,22 @@ namespace ShopWebApplication.Catalog.Products
             throw new NotImplementedException();
         }
 
-        public async Task<int> Update(ProductEditRequest request)
+        public async Task<APIResult<bool>> Update(ProductEditRequest request)
         {
             var product = await data.Products.FindAsync(request.Proid);
             var productTranslation = await data.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == request.Proid
              && x.LangueId == request.LangId);
-            if (product == null || productTranslation == null) throw new ShopException("Can not find Product " + request.Proid);
-            productTranslation.Name = request.Name;
-            productTranslation.SeoAlias = request.SeoAlias;
-            productTranslation.Description = request.Description;
-            productTranslation.SeoTitle = request.SeoTitle;
-            productTranslation.Details = request.Details;
+            if (product == null) throw new ShopException("Can not find Product " + request.Proid);
+            if (productTranslation == null || productTranslation != null)
+            {
+                productTranslation.Name = request.Name;
+                productTranslation.SeoAlias = request.SeoAlias;
+                productTranslation.Description = request.Description;
+                productTranslation.SeoTitle = request.SeoTitle;
+                productTranslation.Details = request.Details;
+                productTranslation.LangueId = request.LangId;
+            }
+
             if (request.ThumbnaiImage != null)
             {
                 var thumnailImage = await data.ProductImages.FirstOrDefaultAsync(i => i.IsDefault == true && i.ProductId == request.Proid);
@@ -302,7 +358,13 @@ namespace ShopWebApplication.Catalog.Products
                     data.ProductImages.Update(thumnailImage);
                 }
             }
-            return await data.SaveChangesAsync(); // return 1 if success
+            var result = await data.SaveChangesAsync(); // return 1 if success
+            if (result != 0)
+            {
+                return new APISuccessResult<bool>();
+            }
+
+            return new APIFailResult<bool>();
         }
 
         public async Task<int> UpdateImage(int productId, int ImageId, ImageEditRequest request)

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShopWebApplication.Catalog.Products;
 using ShopWebModels.Catalog.Images;
 using ShopWebModels.Catalog.Products;
+using ShopWebModels.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,13 +66,15 @@ namespace ShopWebAPI.Controllers
         }
 
         // http://locolhost:port/controller/1
-        [HttpGet("GetById/{productId}/{langugeId}")]
-        public async Task<IActionResult> GetManager_ProductByID([FromQuery] int productId, int langugeId)
+        [HttpGet("{productId}/{langugeId}")]
+        public async Task<IActionResult> GetManager_ProductByID(int productId, int langugeId)
         {
             var data = await _manager.GetById(productId, langugeId);
             if (data == null) return BadRequest("ID not exits");
 
-            return Created(nameof(GetManager_ProductByID), data.Id);
+            var result = new APISuccessResult<ProductViewModel>(data);
+            return Ok(result);
+            // return Created(nameof(GetManager_ProductByID), data.Id);
         }
 
         [HttpPost("CreateProduct")]
@@ -90,16 +93,18 @@ namespace ShopWebAPI.Controllers
             // tra ve 1 action, 1 object va 1 id
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] ProductEditRequest request)
+        [HttpPut("{productId}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update([FromRoute] int productId, [FromForm] ProductEditRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+            request.Proid = productId;
             var affective = await _manager.Update(request);
-            if (affective == 0)
-                return BadRequest();
+            if (!affective.Success)
+                return BadRequest(affective);
 
-            return Ok();
+            return Ok(affective);
         }
 
         [HttpPatch("UpdatePrice/{productId}/{newPrice}")] // ==> update 1 phan cua bang ghi

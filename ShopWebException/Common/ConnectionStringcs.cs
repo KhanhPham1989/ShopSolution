@@ -11,5 +11,12 @@ namespace ShopWebException.Common
         public const string Connect = "Connect";
         public const string Token = "Token";
         public const string LangueID = "LangueID";
+        public const string Na = "Not Available language name";
+    }
+
+    public class ProductSettings
+    {
+        public const int NumberOfProductFearture = 4;
+        public const int NumberOfProductLatest = 4;
     }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShopWeb_AdminApp.Service.Categories
+namespace LibraryAPIApp.Service.Categories
 {
     public interface ICategoriesService
     {

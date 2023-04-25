@@ -22,5 +22,6 @@ namespace ShopWebModels.Catalog.Products
         public int ImageId { get; set; }
         public string ImagePath { get; set; }
         public long FileSize { get; set; }
+        public bool? IsFeatured { get; set; }
     }
 }

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using ShopWeb_AdminApp.Service.RoleClient;
-using ShopWeb_AdminApp.Service.User;
+using LibraryAPIApp.Service.RoleClient;
+using LibraryAPIApp.Service.User;
 using ShopWebModels.Catalog.User;
 using ShopWebModels.Common;
 using System;
@@ -110,7 +110,7 @@ namespace ShopWeb_AdminApp.Controllers
                 };
                 return View(UserUpdateRequet);
             }
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Error", "Home1");
         }
 
         [HttpPost]

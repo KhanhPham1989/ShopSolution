@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using ShopWebApplication.Catalog.Categories;
 using ShopWebApplication.Catalog.Products;
 using ShopWebApplication.Catalog.RoleCata;
+using ShopWebApplication.Catalog.Slide;
 using ShopWebApplication.Catalog.User;
 using ShopWebApplication.Common;
 using ShopWebData.DbContextData;
@@ -58,6 +59,7 @@ namespace ShopWebAPI
             services.AddTransient<IValidator<RegisterRequest>, RegisterValidate>();
             services.AddTransient<IRolesService, RolesServiceImp>();
             services.AddTransient<IManageCategori, ManageCategori>();
+            services.AddTransient<ISlideService, SlideServiceImp>();
 
             services.AddControllers().AddFluentValidation(fw =>
             {

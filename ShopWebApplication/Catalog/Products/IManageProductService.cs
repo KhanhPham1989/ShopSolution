@@ -16,7 +16,7 @@ namespace ShopWebApplication.Catalog.Products
     {
         Task<int> Create(ProductCreateRequest request);
 
-        Task<int> Update(ProductEditRequest request);
+        Task<APIResult<bool>> Update(ProductEditRequest request);
 
         Task<int> Delete(int productId);
 

@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopWeb_AdminApp.Service.Categories
+namespace LibraryAPIApp.Service.Categories
 {
     public class CategoriServiceImp : BaseAPI, ICategoriesService
     {

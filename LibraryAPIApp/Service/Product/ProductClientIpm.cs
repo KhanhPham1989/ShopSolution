@@ -13,7 +13,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShopWeb_AdminApp.Service.Product
+namespace LibraryAPIApp.Service.Product
 {
     public class ProductClientIpm : BaseAPI, IProductClientInterface
     {
@@ -70,7 +70,7 @@ namespace ShopWeb_AdminApp.Service.Product
 
             var respone = await client.PostAsync("/api/Products/CreateProduct", requestContent);
             var result = await respone.Content.ReadAsStringAsync();
-            var content = JsonConvert.DeserializeObject(result);
+
             if (respone.IsSuccessStatusCode)
             {
                 return new APISuccessResult<bool>();
@@ -111,9 +111,14 @@ namespace ShopWeb_AdminApp.Service.Product
             return JsonConvert.DeserializeObject<APIFailResult<PageResult<ProductViewModel>>>("Loi");
         }
 
-        public Task<APIResult<ProductViewModel>> GetById(int productId, int languageID)
+        public async Task<APIResult<ProductViewModel>> GetById(int productId, int languageID)
         {
-            throw new NotImplementedException();
+            string url = $"/api/Products/{productId}/{languageID}";
+            var respone = await GetAsync<APIResult<ProductViewModel>>(url);
+            if (respone != null)
+                return respone;
+
+            return respone;
         }
 
         public Task<APIResult<ImageViewModels>> GetImageById(int ImageId)
@@ -131,9 +136,42 @@ namespace ShopWeb_AdminApp.Service.Product
             throw new NotImplementedException();
         }
 
-        public Task<APIResult<int>> Update(ProductEditRequest request)
+        public async Task<APIResult<bool>> Update(ProductEditRequest request)
         {
-            throw new NotImplementedException();
+            string url = $"/api/Products/{request.Proid}";
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClient.CreateClient();
+            client.BaseAddress = new Uri(_conf["Uri"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            var content = new MultipartFormDataContent();
+
+            content.Add(new StringContent(request.Name.ToString()), "Name");
+            content.Add(new StringContent(request.SeoAlias.ToString()), "SeoAlias");
+            content.Add(new StringContent(request.Description.ToString()), "Description");
+            content.Add(new StringContent(request.SeoTitle.ToString()), "SeoTitle");
+            content.Add(new StringContent(request.Details.ToString()), "Details");
+            content.Add(new StringContent(request.LangId.ToString()), "LangId");
+
+            if (request.ThumbnaiImage != null)
+            {
+                byte[] data;
+                using (var br = new BinaryReader(request.ThumbnaiImage.OpenReadStream()))
+                {
+                    data = br.ReadBytes((int)request.ThumbnaiImage.OpenReadStream().Length);
+                }
+
+                ByteArrayContent bytes = new ByteArrayContent(data);
+                content.Add(bytes, "ThumbnaiImage", request.ThumbnaiImage.FileName);
+                //content.Add(new StringContent(request.ImagePath.ToString()), "ImagePath");
+            }
+
+            var respone = await client.PutAsync(url, content);
+            var result = await respone.Content.ReadAsStringAsync();
+            if (respone.IsSuccessStatusCode)
+            {
+                return new APISuccessResult<bool>();
+            }
+            return new APIFailResult<bool>();
         }
 
         public Task<APIResult<int>> UpdateImage(int productId, int ImageId, ImageEditRequest request)

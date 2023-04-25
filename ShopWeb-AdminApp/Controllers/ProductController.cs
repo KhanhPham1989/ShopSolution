@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using ShopWeb_AdminApp.Service.Categories;
-using ShopWeb_AdminApp.Service.Product;
+using LibraryAPIApp.Service.Categories;
+using LibraryAPIApp.Service.Product;
 using ShopWebModels.Catalog.Categories;
 using ShopWebModels.Catalog.Products;
 using ShopWebModels.Common;
@@ -138,6 +138,47 @@ namespace ShopWeb_AdminApp.Controllers
             }
             thongbao = "Gan quyen khong thanh cong";
             return View("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProduct(int Id)
+        {
+            var product = await _pro.GetById(Id, 1);
+            if (product.Success)
+            {
+                var data = product.ObjResult;
+                var result = new ProductEditRequest()
+                {
+                    Proid = Id,
+                    LangId = 1,
+                    Name = data.ProductName,
+                    SeoAlias = data.SeoAlias,
+                    Description = data.Description,
+                    SeoTitle = data.SeoTitle,
+                    Details = data.TranslationDetails,
+                    ImagePath = data.ThumnailFile
+                };
+                return View(result);
+            };
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct([FromForm] ProductEditRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View(request);
+
+            var data = await _pro.Update(request);
+            if (data.Success)
+            {
+                thongbao = "Ban cap nhat thanh cong";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", "Cap nhat khong thanh cong");
+            return View(request);
         }
     }
 }
