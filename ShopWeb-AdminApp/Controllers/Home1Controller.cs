@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace ShopWeb_AdminApp.Controllers
 {
-    public class HomeController : BaseController
+    public class Home1Controller : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<Home1Controller> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public Home1Controller(ILogger<Home1Controller> logger)
         {
             _logger = logger;
         }

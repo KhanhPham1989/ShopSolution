@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShopWebModels.Catalog.Categories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,9 @@ namespace ShopWebModels.Catalog.Products
     public class ProductViewModel
     {
         public int Id { get; set; }
+
+        public string cateName { get; set; }
+        public List<CategoriSelected> selected { get; set; }
 
         public string ProductName { get; set; }
 
@@ -41,5 +45,8 @@ namespace ShopWebModels.Catalog.Products
         public string TranslationDetails { get; set; }
         public string SeoDescription { get; set; }
         public string SeoTitle { get; set; }
+        public bool? IsFeatured { get; set; }
+        public string ThumnailFile { get; set; }
+        public int languageID { get; set; }
     }
 }

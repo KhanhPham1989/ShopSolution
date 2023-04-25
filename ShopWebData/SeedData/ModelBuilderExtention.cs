@@ -19,8 +19,8 @@ namespace ShopWebData.Extention
             //    new User{UserId = Guid.NewGuid(), UserName = "xxxx",PassWord = "xxx", FullName = "TeduShopxxx",Email = "Teduxxx@gmail.com",PhoneNumber ="0123456987",DoB = DateTime.Now},
             //});
 
-           // modelBuilder.Entity<ProductTranslation>().HasNoKey();
-           
+            // modelBuilder.Entity<ProductTranslation>().HasNoKey();
+
             for (int i = 1; i < 20; i++)
             {
                 var item = new Product()
@@ -53,11 +53,63 @@ namespace ShopWebData.Extention
                 modelBuilder.Entity<AppUser>().HasData(user);
             }
 
+            modelBuilder.Entity<Slider>().HasData(
+                new Slider
+                {
+                    Id = 1,
+                    Name = "First Thumbnail label",
+                    Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit",
+                    Image = "/themes/images/carousel/1.png",
+                    SortOrder = 1,
+                    status = Status.Active,
+                    Url = "#"
+                },
+                 new Slider
+                 {
+                     Id = 2,
+                     Name = "Second Thumbnail label",
+                     Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit",
+                     Image = "/themes/images/carousel/2.png",
+                     SortOrder = 1,
+                     status = Status.Active,
+                     Url = "#"
+                 },
+                  new Slider
+                  {
+                      Id = 3,
+                      Name = "Third Thumbnail label",
+                      Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit",
+                      Image = "/themes/images/carousel/3.png",
+                      SortOrder = 1,
+                      status = Status.Active,
+                      Url = "#"
+                  },
+                   new Slider
+                   {
+                       Id = 4,
+                       Name = "Four Thumbnail label",
+                       Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit",
+                       Image = "/themes/images/carousel/4.png",
+                       SortOrder = 1,
+                       status = Status.Active,
+                       Url = "#"
+                   },
+                    new Slider
+                    {
+                        Id = 5,
+                        Name = "Five Thumbnail label",
+                        Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit",
+                        Image = "/themes/images/carousel/5.png",
+                        SortOrder = 1,
+                        status = Status.Active,
+                        Url = "#"
+                    }
+
+                );
             //modelBuilder.Entity<ProductTranslation>().HasData(new List<ProductTranslation>
             //{
             //    new ProductTranslation
             //    {
-                   
             //        ProductId = 1,
             //        Name = "asdvb",
             //        Description = "Ao Viet Tien",
@@ -65,7 +117,7 @@ namespace ShopWebData.Extention
             //        SeoDescription = "VN",
             //        SeoTitle = "Ao tay dai",
             //        SeoAlias = "Short Skirt",
-                    
+
             //        Language = new Language
             //        {
             //            LangueId =1,
@@ -87,7 +139,6 @@ namespace ShopWebData.Extention
             //    },
             //    new ProductTranslation
             //    {
-                   
             //        ProductId = 2,
             //        Name = "abchiuy",
             //        Description = "Ao China",
@@ -95,10 +146,9 @@ namespace ShopWebData.Extention
             //        SeoDescription = "VN",
             //        SeoTitle = "Ao tay ngan",
             //        SeoAlias = "Long Skirt",
-              
+
             //        Language = new Language
             //        {
-                        
             //            LangueId =2,
             //            LangName = "EG",
             //            IsDefault = Status.Active,
@@ -120,4 +170,5 @@ namespace ShopWebData.Extention
         }
     }
 }
-// chỉnh lại bảng langue id là string 
+
+// chỉnh lại bảng langue id là string

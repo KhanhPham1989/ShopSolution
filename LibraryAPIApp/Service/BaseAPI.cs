@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace ShopWeb_AdminApp.Service
+namespace LibraryAPIApp.Service
 {
     public class BaseAPI
     {

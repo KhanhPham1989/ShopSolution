@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using ShopWeb_AdminApp.Service.User;
+using LibraryAPIApp.Service.User;
 using ShopWebModels.Catalog.User;
 using System;
 using System.Collections.Generic;
@@ -75,7 +75,7 @@ namespace ShopWeb_AdminApp.Controllers
                                             properties: auth);
             // pt nhan 2 hoac 3 tham so, => string cookie, Priciple, 1 thiet lap thoi gian
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home1");
         }
 
         private ClaimsPrincipal ValidateToken(string jwtToken)

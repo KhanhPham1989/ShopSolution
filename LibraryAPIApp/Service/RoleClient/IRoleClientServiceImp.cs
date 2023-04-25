@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace ShopWeb_AdminApp.Service.RoleClient
+namespace LibraryAPIApp.Service.RoleClient
 {
     public class IRoleClientServiceImp : IRoleClientService
     {

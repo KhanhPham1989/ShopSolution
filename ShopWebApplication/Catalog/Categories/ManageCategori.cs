@@ -42,7 +42,8 @@ namespace ShopWebApplication.Catalog.Categories
             {
                 CateId = x.Id,
                 CateName = x.CateName,
-                cateSelected = false
+                cateSelected = false,
+                parentId = x.ParentId,
             }).ToListAsync();
 
             return querry;

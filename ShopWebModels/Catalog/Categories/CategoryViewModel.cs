@@ -10,5 +10,6 @@ namespace ShopWebModels.Catalog.Categories
     {
         public int CateId { get; set; }
         public string CateName { get; set; }
+        public int? parentId { get; set; }
     }
 }

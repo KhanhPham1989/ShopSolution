@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace ShopWebApp.Controllers
 {
-    public class TestController : Controller
+    public class ProductAppController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Detail(int proId)
+        {
+            return View();
+        }
+
+        public IActionResult Categories(int cateId)
         {
             return View();
         }

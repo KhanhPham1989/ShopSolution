@@ -36,7 +36,7 @@ namespace ShopWebData.DbContextData
             modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
             modelBuilder.ApplyConfiguration(new ProductTranslationConfig());
             modelBuilder.ApplyConfiguration(new CategoryTranslationConfig());
-            //modelBuilder.ApplyConfiguration(new AppUserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new SlideConfigConfiguration());
 
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaim").HasKey(x => x.Id);
             modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRole").HasKey((x) => new { x.RoleId, x.UserId });
@@ -96,7 +96,7 @@ namespace ShopWebData.DbContextData
         //public DbSet<AppUser> Users { get; set; }
         public DbSet<RoleIdentity> IRoles { get; set; }
 
-        //public DbSet<SystemActivities> SystemActivities { get; set; }
+        public DbSet<Slider> Slide { get; set; }
 
         public DbSet<ProductInCaterogy> ProductCategory { get; set; }
         public DbSet<Transaction> Transactions { get; set; }

@@ -1,5 +1,8 @@
+using LibraryAPIApp.Service.Categories;
+using LibraryAPIApp.Service.SlideClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +31,16 @@ namespace ShopWebApp
         {
             //services.AddDbContext<TeduDbContext>(options =>
             //options.UseSqlServer(Configuration.GetConnectionString(ConnectionStringcs.Connect)));
+
+            services.AddHttpClient();
+            services.AddHttpContextAccessor();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<ISlideClient, SlideClientServiceImp>();
+
+            services.AddTransient<ICategoriesService, CategoriServiceImp>();
             services.AddControllersWithViews();
+
+            services.AddSession(opt => opt.IdleTimeout = TimeSpan.FromMinutes(5));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,8 +63,26 @@ namespace ShopWebApp
 
             app.UseAuthorization();
 
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                    name: "Categories",
+                    pattern: "BabyShop/danh-muc/{id}", new
+                    {
+                        controller = "ProductApp",
+                        action = "Categories"
+                    });
+
+                endpoints.MapControllerRoute(
+                    name: "Product",
+                    pattern: "BabyShop/{danh-muc}/San-pham/{id}",
+                    new
+                    {
+                        controller = "ProductApp",
+                        action = "Detail"
+                    });
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
