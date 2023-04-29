@@ -12,7 +12,7 @@
         {
             var parent = parents.ElementAt(index);
             var childrent = Model.Where(x => x.parentId == parent.CateId);
-            var url = "BabyShop/danh-muc/";
+            var url = $"BabyShop/";
             if (childrent.Any())
             {
                 <li class="subMenu open">
@@ -20,7 +20,7 @@
                     <ul>
                         @foreach (var child in childrent)
                         {
-                            <li><a class="active" href="/@(url + child.CateId)"><i class="icon-chevron-right"></i>@child.CateName  </a></li>
+                            <li><a class="active" href="/@(url + child.CateName +"/" + child.CateId)"><i class="icon-chevron-right"></i>@child.CateName  </a></li>
                         }
                     </ul>
                 </li>

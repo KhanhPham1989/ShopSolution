@@ -69,6 +69,17 @@ namespace LibraryAPIApp.Service.Categories
             return null;
         }
 
+        public async Task<CategoryViewModel> GetProductByCateId(int cateID, int langId)
+        {
+            string url = $"/api/Categories/{cateID}/{langId}";
+            var respone = await GetAsync<CategoryViewModel>(url);
+            if (respone.CateId != 0)
+            {
+                return respone;
+            }
+            return null;
+        }
+
         //public async Task<List<CategoryViewModel>> GetAllCategory()
         //{
         //    string url = "/api/Categories?cateID=" + cateID;

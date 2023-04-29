@@ -9,10 +9,10 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/[version.number]/[distribution]/ckeditor.js"></script>
     <script src="ckeditor.js"></script>
     <script>
-        
+
         ClassicEditor.create(document.querySelector('#textarea'), {
 
-            })
+        })
             .then(editor => {
                 window.editor = editor;
             })
@@ -56,6 +56,11 @@
                                     <form asp-action="CreateProduct" asp-controller="Product" method="post" enctype="multipart/form-data">
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                         <div class="row mb-9">
+                                            <div class="col-md-4 form-group">
+                                                <select name="CateId" asp-items="@ViewBag.category">
+                                                    <option value="value">----Select----</option>
+                                                </select>
+                                            </div>
                                             <div class="col-md-9 form-group">
                                                 <label asp-for="Name" class="control-label">Name</label>
                                                 <input asp-for="Name" class="form-control" />
@@ -106,6 +111,21 @@
                                                 <label asp-for="langId" class="control-label"> langId</label>
                                                 <input asp-for="langId" class="form-control" />
                                                 <span asp-validation-for="langId" class="text-danger"></span>
+                                            </div>
+                                            <div class="col-md-9 form-group">
+                                                <label asp-for="SeoDescription" class="control-label"> SeoDescription</label>
+                                                <input asp-for="SeoDescription" class="form-control" />
+                                                <span asp-validation-for="SeoDescription" class="text-danger"></span>
+                                            </div>
+                                            <div class="col-md-9 form-group">
+                                                <label asp-for="LangName" class="control-label"> LangName</label>
+                                                <input asp-for="LangName" class="form-control" />
+                                                <span asp-validation-for="LangName" class="text-danger"></span>
+                                            </div>
+                                            <div class="col-md-9 form-group">
+                                                <label asp-for="SeoTitle" class="control-label"> SeoTitle</label>
+                                                <input asp-for="SeoTitle" class="form-control" />
+                                                <span asp-validation-for="SeoTitle" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="mt-4 mb-0">

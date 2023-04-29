@@ -9,6 +9,7 @@ namespace ShopWebModels.Catalog.Products
 {
     public class ProductCreateRequest
     {
+        public int CateId { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
 
@@ -22,6 +23,10 @@ namespace ShopWebModels.Catalog.Products
         public string CaptionImage { get; set; }
         public string SeoAlias { get; set; }
         public int langId { get; set; }
+        public string LangName { get; set; }
+        public string SeoDescription { get; set; }
+
+        public string SeoTitle { get; set; }
         public IFormFile ThumbnaiImage { get; set; }
     }
 }

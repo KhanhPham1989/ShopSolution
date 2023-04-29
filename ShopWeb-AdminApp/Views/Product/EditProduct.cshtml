@@ -91,6 +91,10 @@
                                                 <input asp-for="Details" class="form-control" type="text" />
                                                 <span asp-validation-for="Details" class="text-danger"></span>
                                             </div>
+                                            <div class="thumbnail">
+
+                                                <a href="/@Model.ThumbnaiImage"><img href="/@Model.ThumbnaiImage" src="/@Model.ThumbnaiImage" alt="@Model.Name"></a>
+                                            </div>
                                             <div class="col-md-9 form-group">
                                                 <label asp-for="ThumbnaiImage" class="control-label">Thumbnai Image</label>
                                                 <input asp-for="ThumbnaiImage" class="form-control" type="file" />

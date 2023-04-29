@@ -1,4 +1,5 @@
 using LibraryAPIApp.Service.Categories;
+using LibraryAPIApp.Service.Product;
 using LibraryAPIApp.Service.SlideClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +39,7 @@ namespace ShopWebApp
             services.AddTransient<ISlideClient, SlideClientServiceImp>();
 
             services.AddTransient<ICategoriesService, CategoriServiceImp>();
+            services.AddTransient<IProductClientInterface, ProductClientIpm>();
             services.AddControllersWithViews();
 
             services.AddSession(opt => opt.IdleTimeout = TimeSpan.FromMinutes(5));
@@ -68,7 +70,7 @@ namespace ShopWebApp
             {
                 endpoints.MapControllerRoute(
                     name: "Categories",
-                    pattern: "BabyShop/danh-muc/{id}", new
+                    pattern: "BabyShop/{danh-muc}/{id}", new
                     {
                         controller = "ProductApp",
                         action = "Categories"

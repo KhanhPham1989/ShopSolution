@@ -14,5 +14,7 @@ namespace LibraryAPIApp.Service.Categories
         Task<APIResult<bool>> AssignCategori(int proId, CategoriAssign request);
 
         Task<CategoriAssign> GetCateByProductId(int proId);
+
+        Task<CategoryViewModel> GetProductByCateId(int cateID, int langId);
     }
 }

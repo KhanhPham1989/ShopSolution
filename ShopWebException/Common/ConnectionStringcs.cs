@@ -19,4 +19,9 @@ namespace ShopWebException.Common
         public const int NumberOfProductFearture = 4;
         public const int NumberOfProductLatest = 4;
     }
+
+    public class CartsOrder
+    {
+        public const string Cart = "Cart";
+    }
 }

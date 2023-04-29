@@ -63,8 +63,14 @@ namespace ShopWeb_AdminApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateProduct()
+        public async Task<IActionResult> CreateProduct()
         {
+            var cate = await _cate.GetAllCategory();
+            ViewBag.category = cate.Select(x => new SelectListItem()
+            {
+                Text = x.CateName,
+                Value = x.CateId.ToString(),
+            });
             return View();
         }
 
