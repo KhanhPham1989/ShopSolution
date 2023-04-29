@@ -87,9 +87,9 @@ namespace ShopWebAPI.Controllers
             if (productID == 0)
                 return BadRequest("khong tao san pham duoc");
 
-            var product = await _manager.GetById(productID, request.langId);
             //   return Created(nameof(GetManager_ProductByID), product);
-            return CreatedAtAction(nameof(GetManager_ProductByID), product, new { id = productID });
+            //return CreatedAtAction(nameof(GetManager_ProductByID), product, new { id = productID });
+            return Ok(productID);
             // tra ve 1 action, 1 object va 1 id
         }
 

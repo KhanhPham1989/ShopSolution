@@ -1,5 +1,6 @@
 ﻿using ShopWebModels.Catalog.Categories;
 using ShopWebModels.Common;
+using ShopWebModels.WebApp.CategoriProduct;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace ShopWebApplication.Catalog.Categories
         Task<APIResult<bool>> AssignCategori(int proId, CategoriAssign request);
 
         Task<CategoriAssign> GetCateByProductId(int proId);
+
+        Task<CategoryViewModel> GetProductByCateId(int cateID, int langId);
     }
 }

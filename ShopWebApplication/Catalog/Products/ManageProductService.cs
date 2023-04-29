@@ -15,6 +15,8 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using ShopWebException.Common;
+using ShopWebModels.Catalog.Categories;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ShopWebApplication.Catalog.Products
 {
@@ -65,17 +67,10 @@ namespace ShopWebApplication.Catalog.Products
                         LangueId = request.langId,
                         Description = request.Description,
                         Details = request.Details,
-                        SeoAlias = request.SeoAlias
-                    });
-                }
-                else
-                {
-                    translation.Add(new ProductTranslation()
-                    {
-                        LangueId = langueg.LangueId,
-                        Description = ConnectionStringcs.Na,
-                        Details = ConnectionStringcs.Na,
-                        SeoAlias = ConnectionStringcs.Na
+                        SeoAlias = request.SeoAlias,
+                        SeoDescription = request.SeoDescription,
+                        SeoTitle = request.SeoTitle,
+                        Name = request.LangName
                     });
                 }
             }
@@ -89,7 +84,8 @@ namespace ShopWebApplication.Catalog.Products
                 SeoAlias = request.SeoAlias,
                 DateCreated = DateTime.Now,
                 Description = request.Description,
-                ProductTranslations = translation
+                ProductTranslations = translation,
+                IsFeatured = true,
             };
 
             // Save Image
@@ -111,6 +107,10 @@ namespace ShopWebApplication.Catalog.Products
             }
 
             data.Products.Add(product);
+            await data.SaveChangesAsync();
+            var cateloId = new ProductInCaterogy() { CategoryId = request.CateId, ProductId = product.Id };
+
+            data.ProductCategory.Add(cateloId);
             await data.SaveChangesAsync();
             return product.Id;
         }
@@ -142,13 +142,16 @@ namespace ShopWebApplication.Catalog.Products
         {
             // select and join
             var query = from p in data.Products
-                            //join pt in data.ProductTranslations on p.Id equals pt.ProductId
+                        join pt in data.ProductTranslations on p.Id equals pt.ProductId into ppt
+                        from pt in ppt.DefaultIfEmpty()
+                        join pi in data.ProductImages on p.Id equals pi.ProductId into ppi
+                        from pi in ppi.DefaultIfEmpty()
                         join pic in data.ProductCategory on p.Id equals pic.ProductId into ppic
                         from pic in ppic.DefaultIfEmpty()
                         join c in data.Categories on pic.CategoryId equals c.Id into pc
                         from c in pc.DefaultIfEmpty()
                         where request.Categori.Equals(pic.CategoryId) /*&& pt.LangueId == request.langugeId*/
-                        select new { p, pic, c };
+                        select new { p, pic, c, pi };
             // join cac banng theo ID lien ket, tra ve ket qua theo bang ben trai bat chap gia tri bang ben phai la null
             // ket qua tra ve theo bang ben trai va value la null
 
@@ -174,7 +177,8 @@ namespace ShopWebApplication.Catalog.Products
                     Price = x.p.Price,
                     OriginalPrice = x.p.OriginalPrice,
                     Description = x.p.Description,
-                    CategoriId = x.c.Id
+                    CategoriId = x.c.Id,
+                    ThumnailFile = x.pi.ImagePath
                 }).ToListAsync();
 
             // select and projection
@@ -195,6 +199,9 @@ namespace ShopWebApplication.Catalog.Products
         public async Task<ProductViewModel> GetById(int productId, int languageID)
         {
             var product = await data.Products.FindAsync(productId);
+            var cate = await data.ProductCategory.Where(x => x.ProductId == productId).SingleOrDefaultAsync();
+            var image = await data.ProductImages.Where(x => x.ProductId == productId).SingleOrDefaultAsync();
+
             var productTranslation = await data.ProductTranslations.
                     FirstOrDefaultAsync(x => x.ProductId == productId && x.LangueId == languageID);
             if (product == null)
@@ -216,6 +223,7 @@ namespace ShopWebApplication.Catalog.Products
                     ViewCount = product.ViewCount,
                     languageID = languageID,
                     TranslationDetails = ConnectionStringcs.Na,
+                    CategoriId = cate.CategoryId
                 };
 
                 var input = new ProductTranslation()
@@ -232,6 +240,8 @@ namespace ShopWebApplication.Catalog.Products
                 return productViewModels;
             }
 
+            var path = _Istoreservice.GetFileUrl("No.jpg");
+
             var productViewModel = new ProductViewModel
             {
                 ProductName = product.ProductName,
@@ -244,7 +254,9 @@ namespace ShopWebApplication.Catalog.Products
                 DateCreated = product.DateCreated,
                 SeoTitle = productTranslation.SeoTitle,
                 ViewCount = product.ViewCount,
-                TranslationDetails = productTranslation.Details
+                TranslationDetails = productTranslation.Details,
+                CategoriId = cate.CategoryId != 0 ? cate.CategoryId : 2,
+                ThumnailFile = image == null ? path : image.ImagePath
             };
             return productViewModel;
         }
@@ -357,7 +369,23 @@ namespace ShopWebApplication.Catalog.Products
                     thumnailImage.ImagePath = await this.SaveFile(request.ThumbnaiImage);
                     data.ProductImages.Update(thumnailImage);
                 }
+                else
+                {
+                    product.ProductImages = new List<ProductImage>()
+                    {
+                        new ProductImage()
+                        {
+                         Caption = ConnectionStringcs.Na,
+                        IsDefault = true,
+                        SortOrder = 1,
+                        DateCreate = DateTime.Now,
+                        FileSize = request.ThumbnaiImage.Length,
+                        ImagePath = await this.SaveFile(request.ThumbnaiImage),
+                        },
+                    };
+                }
             }
+            data.Products.Update(product);
             var result = await data.SaveChangesAsync(); // return 1 if success
             if (result != 0)
             {
@@ -419,12 +447,24 @@ namespace ShopWebApplication.Catalog.Products
             throw new NotImplementedException();
         }
 
+        private const string User_Content_Folder_Name = "user_content";
+
         private async Task<string> SaveFile(IFormFile file)
         {
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{(originalFileName)}";
             await _Istoreservice.SaveFileAsync(file.OpenReadStream(), fileName);
-            return fileName;
+            return $"/{User_Content_Folder_Name}/{fileName}";
         }
+
+        //private const string User_Content_Folder_Name = "user_content";
+        //private readonly IWebHostEnvironment webHostEnvironment;
+
+        //private string GetImageIfNoAvailable()
+        //{
+        //    var imagePath = Path.Combine(webHostEnvironment.WebRootPath, User_Content_Folder_Name);
+        //    var fileName = $"/{imagePath}/No.jpg";
+        //    return fileName;
+        //}
     }
 }

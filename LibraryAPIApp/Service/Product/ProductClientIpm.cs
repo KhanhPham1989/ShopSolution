@@ -67,6 +67,10 @@ namespace LibraryAPIApp.Service.Product
             requestContent.Add(new StringContent(request.Details.ToString()), "Details");
             requestContent.Add(new StringContent(request.SeoAlias.ToString()), "SeoAlias");
             requestContent.Add(new StringContent(request.langId.ToString()), "langId");
+            requestContent.Add(new StringContent(request.SeoDescription.ToString()), "SeoDescription");
+            requestContent.Add(new StringContent(request.SeoTitle.ToString()), "SeoTitle");
+            requestContent.Add(new StringContent(request.LangName.ToString()), "LangName");
+            requestContent.Add(new StringContent(request.CateId.ToString()), "CateId");
 
             var respone = await client.PostAsync("/api/Products/CreateProduct", requestContent);
             var result = await respone.Content.ReadAsStringAsync();

@@ -52,5 +52,14 @@ namespace ShopWebAPI.Controllers
 
             return BadRequest(result.Message);
         }
+
+        [HttpGet("{cateID}/{langId}")]
+        public async Task<IActionResult> GetProductByCateId(int cateID, int langId)
+        {
+            var result = await _manageCategori.GetProductByCateId(cateID, langId);
+            if (result != null)
+                return Ok(result);
+            return BadRequest();
+        }
     }
 }

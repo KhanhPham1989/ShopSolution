@@ -3,6 +3,7 @@ using ShopWebData.DbContextData;
 using ShopWebData.Entities;
 using ShopWebModels.Catalog.Categories;
 using ShopWebModels.Common;
+using ShopWebModels.WebApp.CategoriProduct;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,6 +110,22 @@ namespace ShopWebApplication.Catalog.Categories
                 Selected = result
             };
             return data;
+        }
+
+        public async Task<CategoryViewModel> GetProductByCateId(int cateID, int langId)
+        {
+            var query = from c in _dbContext.Categories
+                        join ct in _dbContext.CategoryTranslations on c.Id equals ct.CategoryId
+                        where /*ct.LangueId == langId &&*/ c.Id == cateID
+                        select new { c, ct };
+
+            var result = await query.Select(x => new CategoryViewModel()
+            {
+                CateId = x.c.Id,
+                CateName = x.c.CateName,
+                parentId = x.c.ParentId
+            }).SingleOrDefaultAsync();
+            return result;
         }
     }
 }

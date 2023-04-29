@@ -1,0 +1,150 @@
+﻿@using ShopWebModels.WebApp.Cart
+@model List<CartItemRequest>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@inject Microsoft.Extensions.Configuration.IConfiguration confi;
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="index.html">Home</a> <span class="divider">/</span></li>
+        <li class="active"> SHOPPING CART</li>
+    </ul>
+  
+
+    @*<partial name="LoginForm" />*@
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Description</th>
+                <th>Quantity/Update</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Tax</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                int totalTax = 0;
+                int TotalPrice = 0;
+            }
+            @if (Model != null)
+            {
+                for (int index = 0; index < Model.Count(); index++)
+                {
+                    var product = Model[index];
+                    var SumPrice = (int)(product.Price * product.Quantity);
+                    var Tax = (int)(SumPrice * (decimal)0.01);
+                    var Total = Tax + SumPrice;
+                    TotalPrice = (int)TotalPrice + SumPrice;
+                    totalTax = Tax + totalTax;
+                    <tr>
+                        <td> <img width="60" src="@(confi["Uri"] + product.ImagePath )" alt="@product.ProductName" /></td>
+                        <td>@product.ProductName<br />Color : black, Material : metal</td>
+                        <td>
+                            <div class="input-append">
+                                <input class="span1" style="max-width:34px" placeholder="@product.Quantity" id="appendedInputButtons" size="16" type="text">
+                                <button class="btn" type="button"><i class="icon-minus"></i></button>
+                                <button class="btn" type="button"><i class="icon-plus"></i></button>
+                                <button class="btn btn-danger" type="button"><i class="icon-remove icon-white"></i></button>
+                            </div>
+                        </td>
+                        <td>$@product.Price.ToString().Trim()</td>
+                        <td>0</td>
+                        <td>$@Tax</td>
+                        <td>$@Total</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="6" style="text-align:right">Total Price:	</td>
+                    <td> @TotalPrice </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:right">Total Discount:	</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:right">Total Tax:	</td>
+                    <td>@totalTax </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:right"><strong>TOTAL(@TotalPrice - 0 + @totalTax)) = </strong></td>
+                    <td class="label label-important" style="display:block"> <strong>(@(TotalPrice - 0 + totalTax))  </strong></td>
+                </tr>
+            }
+
+            @if (Model == null)
+            {
+                <tr>
+                    <td colspan="6" style="text-align:right">Total Price:	</td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:right">Total Discount:	</td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:right">Total Tax:	</td>
+                    <td> </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:right"><strong>TOTAL =</strong></td>
+                    <td class="label label-important" style="display:block"> <strong>  </strong></td>
+                </tr>
+                /////////////
+
+            }
+        </tbody>
+    </table>
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>
+                    <form class="form-horizontal">
+                        <div class="control-group">
+                            <label class="control-label"><strong> VOUCHERS CODE: </strong> </label>
+                            <div class="controls">
+                                <input type="text" class="input-medium" placeholder="CODE">
+                                <button type="submit" class="btn"> ADD </button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-bordered">
+        <tr><th>ESTIMATE YOUR SHIPPING </th></tr>
+        <tr>
+            <td>
+                <form class="form-horizontal">
+                    <div class="control-group">
+                        <label class="control-label" for="inputCountry">Country </label>
+                        <div class="controls">
+                            <input type="text" id="inputCountry" placeholder="Country">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="inputPost">Post Code/ Zipcode </label>
+                        <div class="controls">
+                            <input type="text" id="inputPost" placeholder="Postcode">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn">ESTIMATE </button>
+                        </div>
+                    </div>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <a href="/Index.cshtml" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>
+    <a href="login.html" class="btn btn-large pull-right">Next <i class="icon-arrow-right"></i></a>
+</div>
