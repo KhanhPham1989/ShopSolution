@@ -103,7 +103,7 @@ namespace LibraryAPIApp.Service.Product
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
             var client = _httpClient.CreateClient();
             client.BaseAddress = new Uri(_conf["Uri"]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.BearerToken);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
 
             var response = await client.GetAsync(url);
             var body = await response.Content.ReadAsStringAsync();

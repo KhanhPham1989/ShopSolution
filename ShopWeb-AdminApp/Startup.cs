@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LibraryAPIApp.Service.SlideClient;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace ShopWeb_AdminApp
 {
@@ -60,10 +61,10 @@ namespace ShopWeb_AdminApp
 #endif
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
-            {
-                opt.LoginPath = "/Login/Index";
-                opt.AccessDeniedPath = "/User/AccessDenied";
-            });
+           {
+               opt.LoginPath = "/Login/Index";
+               opt.AccessDeniedPath = "/User/AccessDenied";
+           });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

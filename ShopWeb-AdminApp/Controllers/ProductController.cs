@@ -32,7 +32,7 @@ namespace ShopWeb_AdminApp.Controllers
             var session = HttpContext.Session.GetString("Token");
             var request = new GetManageProductPagingRequest
             {
-                BearerToken = session,
+                //  BearerToken = session,
                 Key = Key,
                 PageIndex = PageIndex,
                 PageSize = PageSize,

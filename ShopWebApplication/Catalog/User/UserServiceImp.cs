@@ -73,11 +73,16 @@ namespace ShopWebApplication.Catalog.User
             //stb.Append($"TestOptions.opt_key2.k2:  {k2}\n");
 
             // Ma hoa cac Claim
-            var AppsettingRoot = _config.GetSection("Token");
+            //var AppsettingRoot = _config.GetSection("Token");
 
-            var TokenKey = AppsettingRoot["Key"];
-            var TokenIssuer = AppsettingRoot["Issuer"];
-            var key = new SymmetricSecurityKey(UTF8Encoding.UTF8.GetBytes(TokenKey));
+            //var TokenKey = AppsettingRoot["Key"];
+            //var TokenIssuer = AppsettingRoot["Issuer"];
+            //var TokenAudience = AppsettingRoot["Issuer"];
+
+            string TokenKey = _config["Token:Key"];
+            string TokenIssuer = _config["Token:Issuer"];
+            var TokenByte = Encoding.UTF8.GetBytes(TokenKey);
+            var key = new SymmetricSecurityKey(TokenByte);
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var Token = new JwtSecurityToken(TokenIssuer,

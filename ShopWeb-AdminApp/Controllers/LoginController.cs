@@ -63,11 +63,12 @@ namespace ShopWeb_AdminApp.Controllers
             var auth = new AuthenticationProperties()
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(5),
-                IsPersistent = true,
+                IsPersistent = false,
 
                 //nhận hoặc đặt xem phiên xác thực có được duy trì qua nhiều yêu cầu hay khong
             };
-            HttpContext.Session.SetString("Token", token);
+
+            _httpContextAccessor.HttpContext.Session.SetString("Token", token);
 
             await HttpContext.SignInAsync(
                                             scheme: CookieAuthenticationDefaults.AuthenticationScheme,
@@ -87,10 +88,18 @@ namespace ShopWeb_AdminApp.Controllers
 
             SecurityToken ValidateToken;
             TokenValidationParameters validationParameters = new TokenValidationParameters();
+            // package Microsoft.IdentityModel.Tokens;
+            //var AppsettingRoot = _config.GetSection("Token");
+            //var TokenKey = AppsettingRoot["Key"];
+            //var TokenIssuer = AppsettingRoot["Issuer"];
+
+            var TokenKey = _config["Token:Key"];
+            var TokenIssuer = _config["Token:Issuer"];
+
             validationParameters.ValidateLifetime = true; // kiem soat token moi luc
-            validationParameters.ValidAudience = _config["Token:Issuer"];
-            validationParameters.ValidIssuer = _config["Token:Issuer"];
-            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
+            validationParameters.ValidAudience = TokenIssuer;
+            validationParameters.ValidIssuer = TokenIssuer;
+            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenKey));
 
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out ValidateToken);
             return principal;

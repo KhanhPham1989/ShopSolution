@@ -35,10 +35,15 @@
     <div id="header">
         <div class="container">
             <div id="welcomeLine" class="row">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div class="span6">Welcome!<strong> @User.Identity.Name </strong></div>
-                }
+                <div class="span6">
+                    <div class="pull-right">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="span6">Welcome!<strong> @User.Identity.Name </strong></div>
+                        }
+                    </div>
+                </div>
+
                 @*<div>
                         <a href='@Url.Action("Index","Cart")'>
                             <i class="fa fa-shopping-cart"></i> Cart @await Html.PartialAsync("CartView")
@@ -47,12 +52,7 @@
 
                 <div class="span6">
                     <div class="pull-right">
-                        <a href="product_summary.html"><span class="">Fr</span></a>
-                        <a href="product_summary.html"><span class="">Es</span></a>
-                        <span class="btn btn-mini">En</span>
-                        <a href="product_summary.html"><span>&pound;</span></a>
-                        <span class="btn btn-mini">$155.00</span>
-                        <a href="product_summary.html"><span class="">$</span></a>
+
                         <a href='@Url.Action("Index","Cart")'>
                             <span class="btn btn-mini btn-primary">
                                 <i class="icon-shopping-cart icon-white">
@@ -241,5 +241,7 @@
     <script src="~/themes/js/jquery.lightbox-0.5.js"></script>
     <script src="~/js/site.js"></script>
     <span id="/themesBtn"></span>
+    @RenderSection("Script", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

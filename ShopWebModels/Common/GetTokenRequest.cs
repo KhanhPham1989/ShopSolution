@@ -8,6 +8,6 @@ namespace ShopWebModels.Common
 {
     public class GetTokenRequest
     {
-        public string BearerToken { get; set; }
+        // public string BearerToken { get; set; }
     }
 }

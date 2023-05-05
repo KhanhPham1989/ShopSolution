@@ -12,6 +12,7 @@ namespace ShopWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -30,7 +31,8 @@ namespace ShopWebAPI.Controllers
             if (string.IsNullOrEmpty(result))
                 return BadRequest("UserName or Password is incorrect");
 
-            //HttpContext.Session.SetString("Token", result); // luu vao session
+            // HttpContext.Session.SetString("Bearer", result); // luu vao session
+
             return Ok(result);
         }
 

@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ShopWebApplication.Catalog.Cart;
 using ShopWebApplication.Catalog.Categories;
 using ShopWebApplication.Catalog.Products;
 using ShopWebApplication.Catalog.RoleCata;
@@ -60,6 +61,7 @@ namespace ShopWebAPI
             services.AddTransient<IRolesService, RolesServiceImp>();
             services.AddTransient<IManageCategori, ManageCategori>();
             services.AddTransient<ISlideService, SlideServiceImp>();
+            services.AddTransient<IPaymentAPI, PaymentAPIService>();
 
             services.AddControllers().AddFluentValidation(fw =>
             {
@@ -68,6 +70,7 @@ namespace ShopWebAPI
             });
 
             services.AddHttpClient();
+
             //services.Configure<IdentityOptions>(options =>
             //{
             //    // Thiết lập về Passwor;
@@ -96,64 +99,61 @@ namespace ShopWebAPI
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Swager ShopOnlineAPI", Version = "v1" });
-
-                // dinh nghia security
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "Here is the security to protected API server. Please input the token heare.",
-                    Name = "Authorization", // xac dinh quyen su dujng vs token
-                    Type = SecuritySchemeType.ApiKey, // kieu
-                    In = ParameterLocation.Header, // token lay tu dau (header, query or cokie)
-                    Scheme = "Bearer",
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
                 });
-
-                // cau hinh bao mat
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement() // pt nhan 2 key
-                {
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                  {
                     {
-                        new OpenApiSecurityScheme()
-                    {
-                        Reference = new OpenApiReference()
-                        {
+                      new OpenApiSecurityScheme
+                      {
+                        Reference = new OpenApiReference
+                          {
                             Type = ReferenceType.SecurityScheme,
-                            Id =  "Bearer",
+                            Id = "Bearer"
+                          },
+                          Scheme = "oauth2",
+                          Name = "Bearer",
+                          In = ParameterLocation.Header,
                         },
-                        Scheme = "oauth2" ,
-                        Name =  "Bearer",
-                        In = ParameterLocation.Header,
-                    },
-                    new List<string>()
-                    }
-                });
+                        new List<string>()
+                      }
+                    });
             });
 
-            var AppSettingToken = Configuration.GetSection("Token");
-            var TokenKey = AppSettingToken["Key"];
-            var TokenIssuer = AppSettingToken["Issuer"];
-            var TokenByte = Encoding.UTF8.GetBytes(TokenKey);
+            string issuer = Configuration.GetValue<string>("Token:Issuer");
+            string signingKey = Configuration.GetValue<string>("Token:Key");
+            byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
 
             services.AddAuthentication(opt =>
             {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // ten mac dinh he thong
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options =>
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    options.RequireHttpsMetadata = false;
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = TokenIssuer,
-                        ValidateAudience = true,
-                        ValidAudience = TokenIssuer,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ClockSkew = TimeSpan.Zero,
-                        IssuerSigningKey = new SymmetricSecurityKey(TokenByte)
-                    };
-                });
+                    ValidateIssuer = true,
+                    ValidIssuer = issuer,
+                    ValidateAudience = true,
+                    ValidAudience = issuer,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = System.TimeSpan.Zero,
+                    IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -176,6 +176,7 @@ namespace ShopWebAPI
             app.UseRouting();
 
             app.UseAuthorization();
+
             app.UseSwagger();
             app.UseSwaggerUI(p => p.SwaggerEndpoint("/swagger/v1/swagger.json", "Swager ShopOnlineAPI"));
 
