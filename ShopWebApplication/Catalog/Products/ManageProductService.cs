@@ -198,7 +198,7 @@ namespace ShopWebApplication.Catalog.Products
 
         public async Task<ProductViewModel> GetById(int productId, int languageID)
         {
-            var product = await data.Products.FindAsync(productId);
+            var product = await data.Products.Where(x => x.Id == productId).SingleOrDefaultAsync();
             var cate = await data.ProductCategory.Where(x => x.ProductId == productId).SingleOrDefaultAsync();
             var image = await data.ProductImages.Where(x => x.ProductId == productId).SingleOrDefaultAsync();
 

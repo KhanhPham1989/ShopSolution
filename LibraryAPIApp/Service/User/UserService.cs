@@ -54,11 +54,11 @@ namespace LibraryAPIApp.Service.User
             //if (request.Keyword == null)
             //    throw new Exception("Keyword must be input");
             var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+
             var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
-
             client.BaseAddress = new Uri(_config["Uri"]);
-
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+            //client.DefaultRequestHeaders.TryAddWithoutValidation($"Bearer {session}");
             var reponse = await client.GetAsync($"/api/Users/GetUserPaging?PageIndex={request.PageIndex}" +
                 $"&PageSize={request.PageSize}&Keyword={request.Keyword}");
             var data = await reponse.Content.ReadAsStringAsync();

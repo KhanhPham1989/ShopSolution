@@ -1,4 +1,5 @@
 using LibraryAPIApp.Service.Categories;
+using LibraryAPIApp.Service.Payment;
 using LibraryAPIApp.Service.Product;
 using LibraryAPIApp.Service.SlideClient;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +41,8 @@ namespace ShopWebApp
 
             services.AddTransient<ICategoriesService, CategoriServiceImp>();
             services.AddTransient<IProductClientInterface, ProductClientIpm>();
+            services.AddTransient<IPayment, PaymentServiceImp>();
+
             services.AddControllersWithViews();
 
             services.AddSession(opt => opt.IdleTimeout = TimeSpan.FromMinutes(5));

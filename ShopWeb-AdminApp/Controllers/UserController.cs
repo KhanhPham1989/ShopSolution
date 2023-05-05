@@ -44,7 +44,6 @@ namespace ShopWeb_AdminApp.Controllers
             //TokenSession = session;
             var GetUser = new GetUserPagingRequest()
             {
-                // BearerToken = session,
                 PageIndex = PageIndex,
                 PageSize = PageSize,
                 Keyword = Keyword

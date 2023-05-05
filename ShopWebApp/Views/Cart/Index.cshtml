@@ -10,9 +10,23 @@
         <li><a href="index.html">Home</a> <span class="divider">/</span></li>
         <li class="active"> SHOPPING CART</li>
     </ul>
-  
+    @section Scripts{
 
-    @*<partial name="LoginForm" />*@
+        <script>
+            setTimeout(function () {
+                $('#msg').fadeOut('slow');
+            }, 4000);
+        </script>
+
+    }
+    @if (ViewBag.mess != null)
+    {
+        <div>
+            <div id="msg" class="alert alert-success" role="alert">
+                @ViewBag.mess
+            </div>
+        </div>
+    }
 
     <table class="table table-bordered">
         <thead>
@@ -47,33 +61,34 @@
                         <td>@product.ProductName<br />Color : black, Material : metal</td>
                         <td>
                             <div class="input-append">
-                                <input class="span1" style="max-width:34px" placeholder="@product.Quantity" id="appendedInputButtons" size="16" type="text">
-                                <button class="btn" type="button"><i class="icon-minus"></i></button>
-                                <button class="btn" type="button"><i class="icon-plus"></i></button>
+                                <input class="span1 alert-success" style="max-width:45px" placeholder="@product.Quantity" id="@($"quantity-{product.ProductId}")" size="16"
+                                       type="number" asp-for="@product.Quantity">
+                                <button asp-action="UpdateCart" data-productId="@product.ProductId" class="btn updatecartItem" type="button"><i class="icon-check icon-wrench"></i></button>
+
                                 <button class="btn btn-danger" type="button"><i class="icon-remove icon-white"></i></button>
                             </div>
                         </td>
-                        <td>$@product.Price.ToString().Trim()</td>
-                        <td>0</td>
-                        <td>$@Tax</td>
-                        <td>$@Total</td>
+                        <td>$@(product.Price.ToString("n0"))</td>
+                        <td>$0</td>
+                        <td>$@Tax.ToString("n0")</td>
+                        <td>$@Total.ToString("n0")</td>
                     </tr>
                 }
                 <tr>
                     <td colspan="6" style="text-align:right">Total Price:	</td>
-                    <td> @TotalPrice </td>
+                    <td> $@TotalPrice.ToString("n0") </td>
                 </tr>
                 <tr>
                     <td colspan="6" style="text-align:right">Total Discount:	</td>
-                    <td>0</td>
+                    <td>$0</td>
                 </tr>
                 <tr>
                     <td colspan="6" style="text-align:right">Total Tax:	</td>
-                    <td>@totalTax </td>
+                    <td>$@totalTax.ToString("n0") </td>
                 </tr>
                 <tr>
-                    <td colspan="6" style="text-align:right"><strong>TOTAL(@TotalPrice - 0 + @totalTax)) = </strong></td>
-                    <td class="label label-important" style="display:block"> <strong>(@(TotalPrice - 0 + totalTax))  </strong></td>
+                    <td colspan="6" style="text-align:right"><strong>TOTAL(@TotalPrice.ToString("n0")  - 0 + @totalTax.ToString("n0") )) = </strong></td>
+                    <td class="label label-important" style="display:block"> <strong>$@((TotalPrice - 0 + totalTax).ToString("n0") ) </strong></td>
                 </tr>
             }
 
@@ -145,6 +160,34 @@
             </td>
         </tr>
     </table>
-    <a href="/Index.cshtml" class="btn btn-large"><i class="icon-arrow-left"></i> Continue Shopping </a>
-    <a href="login.html" class="btn btn-large pull-right">Next <i class="icon-arrow-right"></i></a>
+    <button type="submit" asp-action="Index" asp-controller="Home" class="btn btn-large"><i class="icon-arrow-left"></i> Return Home </button>
+    <div class="btn btn-large pull-right">
+        <i class="icon-arrow-right"></i>
+        @Html.ActionLink("Continue Payment", "PaymentRequest", "Cart")
+    </div>
+    <button type="submit" asp-action="PaymentRequest" class="btn btn-large pull-right">Continue Payment <i class="icon-arrow-right"></i></button>
 </div>
+
+@section Script{
+    <script>
+        $(document).ready(function () {
+            $(".updatecartItem").click(function (event) {
+                event.preventDefault();
+                var productId = $(this).attr("data-productId");
+                var quantity = $("#quantity-" + productId).val();
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateCart")",
+                    data: {
+                        productId: productId,
+                        quantity: quantity
+                    },
+                    success: function (result) {
+                        window.location.href = "@Url.Action("Index")";
+                    }
+                });
+            });
+        });
+    </script>
+
+}

@@ -1,0 +1,131 @@
+﻿@using ShopWebModels.WebApp.Cart
+@model PaymentRequest
+@{
+    ViewData["Title"] = "PaymentRequest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@inject Microsoft.Extensions.Configuration.IConfiguration confi;
+
+<div class="span9">
+    <ul class="breadcrumb">
+        <li><a href="index.html">Home</a> <span class="divider">/</span></li>
+        <li class="active"> Payment Order</li>
+    </ul>
+    @section Scripts{
+
+        <script>
+            setTimeout(function () {
+                $('#msg').fadeOut('slow');
+            }, 4000);
+        </script>
+
+    }
+    @if (ViewBag.mess != null)
+    {
+        <div>
+            <div id="msg" class="alert alert-success" role="alert">
+                @ViewBag.mess
+            </div>
+        </div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                int totalTax = 0;
+                int TotalPrice = 0;
+            }
+
+            @for (int index = 0; index < Model.cartItem.Count(); index++)
+            {
+                var product = Model.cartItem[index];
+                var SumPrice = (int)(product.Price * product.Quantity);
+                var Tax = (int)(SumPrice * (decimal)0.01);
+                var Total = Tax + SumPrice;
+                TotalPrice = (int)TotalPrice + SumPrice;
+                totalTax = Tax + totalTax;
+                <tr>
+                    <td> <img width="60" src="@(confi["Uri"] + product.ImagePath )" alt="@product.ProductName" /></td>
+                    <td>@product.ProductName<br />Color : black, Material : metal</td>
+                    <td>
+                        @product.Quantity
+                    </td>
+                    <td>$@(product.Price.ToString("n0"))</td>
+
+                    <td>$@Total.ToString("n0")</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="4" style="text-align:right"><strong>TOTAL = </strong></td>
+                <td class="label label-important" style="display:block"> <strong>$@((TotalPrice - 0 + totalTax).ToString("n0") ) </strong></td>
+            </tr>
+        </tbody>
+    </table>
+    <form class="form-horizontal" asp-action="PaymentRequest" method="post">
+        <table class="table table-bordered">
+            <tr><th>ESTIMATE YOUR SHIPPING </th></tr>
+            <tr>
+                <td>
+
+                    <div class="control-group">
+                        <label class="control-label" asp-for="ShipName">Nguoi nhan </label>
+                        <div class="controls">
+                            <input type="text" asp-for="ShipName" placeholder="Nguoi nhan">
+                            <span asp-validation-for="ShipName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" asp-for="ShipAddress">Dia chi </label>
+                        <div class="controls">
+                            <input type="text" asp-for="ShipAddress" placeholder="Dia chi ">
+                            <span asp-validation-for="ShipAddress" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" asp-for="ShipEmail">Email </label>
+                        <div class="controls">
+                            <input type="text" asp-for="ShipEmail" placeholder="Email">
+                            <span asp-validation-for="ShipEmail" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" asp-for="ShipPhone">Phone Number </label>
+                        <div class="controls">
+                            <input type="text" asp-for="ShipPhone" placeholder="Country">
+                            <span asp-validation-for="ShipPhone" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="control-group" hidden>
+                        <label class="control-label" asp-for="UserId">UserId </label>
+                        <div class="controls">
+                            <input type="text" asp-for="UserId" placeholder="UserId">
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        @{
+                            var time = DateTime.Now;
+                        }
+
+                        <p>Don hang cua ban duoc giao vao ngay @Model.SendItem(time)</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <button type="submit" asp-action="PaymentRequest" class="btn btn-large"><i class="icon-ok"></i> Submit Payment</button>
+    </form>
+
+    <a href="../Views/Home/Index.cshtml" class="btn btn-large pull-right">Cancel <i class="icon-remove"></i></a>
+</div>
